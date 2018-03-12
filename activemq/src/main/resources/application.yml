@@ -1,0 +1,19 @@
+#activemq
+#spring.activemq.brokerUrl=tcp://127.0.0.1:61616
+#spring.activemq.user=admin
+#spring.activemq.password=admin
+server:
+  port: 8090
+spring:
+  jms:
+    pub-sub-domain: true
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    user: admin
+    password: admin
+    in-memory: false
+    pool:
+      enabled: false
+    packages:
+      trust-all: true
+

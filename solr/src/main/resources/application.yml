@@ -1,0 +1,10 @@
+server:
+  port: 8111
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/pages/
+      suffix: .jsp
+
+spring.data.solr.host: http://127.0.0.1:8080/solr
