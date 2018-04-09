@@ -17,6 +17,12 @@
 		<version>2.0.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<modules>
+		<module>activemq</module>
+		<module>quartz</module>
+		<module>solr</module>
+		<module>thread</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
