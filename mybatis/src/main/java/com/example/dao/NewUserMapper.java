@@ -1,6 +1,6 @@
-package com.example.mybatis.dao;
+package com.example.dao;
 
-import com.example.mybatis.model.NewUser;
+import com.example.model.NewUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

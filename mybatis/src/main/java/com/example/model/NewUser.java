@@ -1,4 +1,4 @@
-package com.example.mybatis.model;
+package com.example.model;
 
 /**
  * 新的用户信息
@@ -6,7 +6,7 @@ package com.example.mybatis.model;
  * @author guodahai
  * @version 2018/4/12 下午4:46
  */
-public class OldUser {
+public class NewUser {
     /**
      * 用户id
      */

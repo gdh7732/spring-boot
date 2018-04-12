@@ -1,7 +1,7 @@
-package com.example.mybatis.service;
+package com.example.service;
 
-import com.example.mybatis.model.NewUser;
-import com.example.mybatis.model.OldUser;
+import com.example.model.NewUser;
+import com.example.model.OldUser;
 
 /**
  * @author guodahai

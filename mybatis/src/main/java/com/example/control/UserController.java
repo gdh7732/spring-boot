@@ -1,9 +1,9 @@
-package com.example.mybatis.control;
+package com.example.control;
 
 
-import com.example.mybatis.model.NewUser;
-import com.example.mybatis.model.OldUser;
-import com.example.mybatis.service.UserService;
+import com.example.model.NewUser;
+import com.example.model.OldUser;
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

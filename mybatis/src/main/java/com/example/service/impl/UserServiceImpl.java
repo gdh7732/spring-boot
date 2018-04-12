@@ -1,10 +1,10 @@
-package com.example.mybatis.service.impl;
+package com.example.service.impl;
 
-import com.example.mybatis.dao.NewUserMapper;
-import com.example.mybatis.dao.OldUserMapper;
-import com.example.mybatis.model.NewUser;
-import com.example.mybatis.model.OldUser;
-import com.example.mybatis.service.UserService;
+import com.example.dao.NewUserMapper;
+import com.example.dao.OldUserMapper;
+import com.example.model.NewUser;
+import com.example.model.OldUser;
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
