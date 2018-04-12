@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,7 @@ public class NewDateSourceConfig extends BaseDateSourceConfig {
     private String driver;
 
     @Bean(name = "newDataSource")
+    @Primary
     public DataSource dataSource() {
         final DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driver);
