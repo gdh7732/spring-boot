@@ -46,8 +46,13 @@
 			<artifactId>solr-solrj</artifactId>
 			<version>4.10.3</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>4.10.3</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

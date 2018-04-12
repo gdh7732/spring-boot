@@ -23,6 +23,7 @@
 		<module>solr</module>
 		<module>thread</module>
 		<module>spring</module>
+		<module>mybatis</module>
 	</modules>
 
 	<properties>
