@@ -3,6 +3,7 @@ package com.example.mybatis.config;
 import com.alibaba.druid.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import java.sql.SQLFeatureNotSupportedException;
@@ -12,6 +13,7 @@ import java.sql.SQLFeatureNotSupportedException;
  * @author guodahai
  * @version 2018/4/12 下午3:01
  */
+@Configuration
 public class MultipleDataSource extends AbstractRoutingDataSource {
 
     private static final Logger logger = LoggerFactory.getLogger(MultipleDataSource.class);
