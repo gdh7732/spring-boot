@@ -19,7 +19,7 @@ public class DataSourceInterceptor {
 
     private Logger logger = LoggerFactory.getLogger(DataSourceInterceptor.class);
 
-    @Pointcut("execution(* com.example.dao.NewUserMapper.*())")
+    @Pointcut("execution(* com.example.dao.NewUserMapper.*(..))")
     public void newDataSource() {
     }
 
@@ -29,7 +29,7 @@ public class DataSourceInterceptor {
         logger.info("当前数据源为:{}", DatabaseType.NEW_DATASOURCE);
     }
 
-    @Pointcut("execution(* com.example.dao.OldUserMapper.*())")
+    @Pointcut("execution(* com.example.dao.OldUserMapper.*(..))")
     public void oldDataSource() {
     }
 
