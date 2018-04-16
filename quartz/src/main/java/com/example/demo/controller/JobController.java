@@ -34,7 +34,7 @@ public class JobController {
     private SchedulerService schedulerService;
 
     @GetMapping(value = "/index")
-    public String index(Model model) {
+    public String index(Model model) throws Exception {
         PageInfo<JobAndTrigger> jobAndTrigger = triggerService.getJobAndTriggerDetails(1, 10);
         Map<String, Object> map = new HashMap<>();
         map.put("JobAndTrigger", jobAndTrigger);
@@ -46,6 +46,7 @@ public class JobController {
     @PostMapping(value = "/add")
     public void add(TriggerRequest request) throws Exception {
         schedulerService.add(request);
+        triggerService.create(request);
     }
 
 
@@ -74,7 +75,7 @@ public class JobController {
 
 
     @GetMapping(value = "/query")
-    public Map<String, Object> query(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+    public Map<String, Object> query(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) throws Exception {
         PageInfo<JobAndTrigger> jobAndTrigger = triggerService.getJobAndTriggerDetails(pageNum, pageSize);
         Map<String, Object> map = new HashMap<>();
         map.put("JobAndTrigger", jobAndTrigger);

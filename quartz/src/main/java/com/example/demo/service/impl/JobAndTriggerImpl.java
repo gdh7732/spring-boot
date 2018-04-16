@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.JobAndTriggerRepository;
 import com.example.demo.entity.JobAndTrigger;
+import com.example.demo.entity.TriggerRequest;
 import com.example.demo.service.JobAndTriggerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,8 +30,19 @@ public class JobAndTriggerImpl implements JobAndTriggerService {
         return page;
     }
 
-    @Scheduled
-    public void deamo() {
-
+    @Override
+    public List<JobAndTrigger> getAll() throws Exception {
+        return jobAndTriggerRepository.findAll();
     }
+
+    @Override
+    public Boolean create(TriggerRequest request) throws Exception {
+        JobAndTrigger jobAndTrigger = new JobAndTrigger();
+        jobAndTrigger.setJobClassName(request.getJobClassName());
+        jobAndTrigger.setJobGroup(request.getJobGroup());
+        jobAndTrigger.setCronExpression(request.getCronExpression());
+        jobAndTriggerRepository.save(jobAndTrigger);
+        return true;
+    }
+
 }

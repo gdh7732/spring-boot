@@ -1,8 +1,12 @@
 package com.example.demo;
 
+import com.example.demo.entity.JobAndTrigger;
+import com.example.demo.job.BaseJob;
 import com.example.demo.job.HelloJob;
+import com.example.demo.service.JobAndTriggerService;
 import org.quartz.*;
 import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -17,6 +22,9 @@ import java.util.Properties;
  */
 @Configuration
 public class SchedulerConfig {
+
+    @Autowired
+    private JobAndTriggerService triggerService;
 
     @Bean(name = "schedulerFactory")
     public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
@@ -53,28 +61,28 @@ public class SchedulerConfig {
     }
 
     public void startHelloJob(Scheduler scheduler) throws Exception {
-
+        List<JobAndTrigger> all = triggerService.getAll();
         // 启动调度器
         scheduler.start();
+        for (JobAndTrigger jobAndTrigger : all) {
+            //构建job信息
+            BaseJob baseJob = getClass(jobAndTrigger.getJobClassName());
+            JobDetail jobDetail = JobBuilder.newJob(baseJob.getClass()).withIdentity(jobAndTrigger.getJobClassName(), jobAndTrigger.getJobGroup()).build();
 
-        //构建job信息
-        JobDetail jobDetail = JobBuilder.newJob(HelloJob.class).withIdentity(HelloJob.class.getName(), Scheduler.DEFAULT_GROUP).build();
+            //表达式调度构建器(即任务执行的时间)
+            String cronExpression = jobAndTrigger.getCronExpression();
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
-        //表达式调度构建器(即任务执行的时间)
-        String cronExpression = "* * 1 * * ?                                                ";
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
-        //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(HelloJob.class.getName(), Scheduler.DEFAULT_GROUP)
-                .withSchedule(scheduleBuilder).build();
-
-        try {
+            //按新的cronExpression表达式构建一个新的trigger
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobAndTrigger.getJobClassName(), jobAndTrigger.getTriggerGroup())
+                    .withSchedule(scheduleBuilder).build();
             scheduler.scheduleJob(jobDetail, trigger);
-
-        } catch (SchedulerException e) {
-            System.out.println("创建定时任务失败" + e);
-            throw new Exception("创建定时任务失败");
         }
+    }
+
+    public static BaseJob getClass(String classname) throws Exception {
+        Class<?> clazz = Class.forName(classname);
+        return (BaseJob) clazz.newInstance();
     }
 
 }

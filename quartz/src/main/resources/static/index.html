@@ -123,8 +123,8 @@
 
     <el-dialog title="添加任务" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-            <el-form-item label="任务名称" label-width="120px" style="width:35%">
-                <el-input v-model="form.jobName" auto-complete="off"></el-input>
+            <el-form-item label="任务类名称" label-width="120px" style="width:35%">
+                <el-input v-model="form.jobClassName" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="任务分组" label-width="120px" style="width:35%">
                 <el-input v-model="form.jobGroup" auto-complete="off"></el-input>
@@ -187,13 +187,13 @@
 
             //提交的表单
             form: {
-                jobName: '',
+                jobClassName: '',
                 jobGroup: '',
                 cronExpression: '',
             },
 
             updateform: {
-                jobName: '',
+                jobClassName: '',
                 jobGroup: '',
                 cronExpression: '',
             },
@@ -216,7 +216,7 @@
             handleDelete: function (index, row) {
                 this.$http.post('job/delete', {
                     "jobClassName": row.jobClassName,
-                    "jobGroupName": row.jobGroupName
+                    "jobGroup": row.jobGroup
                 }, {emulateJSON: true}).then(function (res) {
                     this.loadData(this.currentPage, this.pagesize);
                 }, function () {
@@ -228,7 +228,7 @@
             handlePause: function (index, row) {
                 this.$http.post('job/pause', {
                     "jobClassName": row.jobClassName,
-                    "jobGroupName": row.jobGroupName
+                    "jobGroup": row.jobGroup
                 }, {emulateJSON: true}).then(function (res) {
                     this.loadData(this.currentPage, this.pagesize);
                 }, function () {
@@ -238,9 +238,9 @@
 
             //恢复任务
             handleResume: function (index, row) {
-                this.$http.post('job/resumejob', {
+                this.$http.post('job/resume', {
                     "jobClassName": row.jobClassName,
-                    "jobGroupName": row.jobGroupName
+                    "jobGroup": row.jobGroup
                 }, {emulateJSON: true}).then(function (res) {
                     this.loadData(this.currentPage, this.pagesize);
                 }, function () {
@@ -263,7 +263,7 @@
                 this.$http.post('job/add',
                     {
                         "jobClassName": this.form.jobClassName,
-                        "jobGroupName": this.form.jobGroupName,
+                        "jobGroup": this.form.jobGroup,
                         "cronExpression": this.form.cronExpression
                     }, {emulateJSON: true}).then(function (res) {
                     this.loadData(this.currentPage, this.pagesize);
@@ -277,8 +277,8 @@
             handleUpdate: function (index, row) {
                 console.log(row)
                 this.updateFormVisible = true;
-                this.updateform.jobName = row.jobClassName;
-                this.updateform.jobGroup = row.jobGroupName;
+                this.updateform.jobClassName = row.jobClassName;
+                this.updateform.jobGroup = row.jobGroup;
             },
 
             //更新任务
@@ -287,7 +287,7 @@
                 ('job/reschedule',
                     {
                         "jobClassName": this.updateform.jobClassName,
-                        "jobGroupName": this.updateform.jobGroupName,
+                        "jobGroup": this.updateform.jobGroup,
                         "cronExpression": this.updateform.cronExpression
                     }, {emulateJSON: true}
                 ).then(function (res) {

@@ -12,7 +12,7 @@ public class TriggerRequest {
     /**
      * job所在组
      */
-    private String jobGroupName;
+    private String jobGroup;
     /**
      * 表达式
      */
@@ -26,12 +26,12 @@ public class TriggerRequest {
         this.jobClassName = jobClassName;
     }
 
-    public String getJobGroupName() {
-        return jobGroupName;
+    public String getJobGroup() {
+        return jobGroup;
     }
 
-    public void setJobGroupName(String jobGroupName) {
-        this.jobGroupName = jobGroupName;
+    public void setJobGroup(String jobGroup) {
+        this.jobGroup = jobGroup;
     }
 
     public String getCronExpression() {

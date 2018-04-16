@@ -11,7 +11,7 @@ import java.math.BigInteger;
 public class JobAndTrigger {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /**
      * 任务名称

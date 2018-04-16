@@ -22,20 +22,20 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public void add(TriggerRequest request) throws Exception {
         String jobClassName = request.getJobClassName();
-        String jobGroupName = request.getJobGroupName();
+        String jobGroup = request.getJobGroup();
         String cronExpression = request.getCronExpression();
 
         // 启动调度器
         scheduler.start();
 
         //构建job信息
-        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).build();
+        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroup).build();
 
         //表达式调度构建器(即任务执行的时间)
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
         //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName)
+        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroup)
                 .withSchedule(scheduleBuilder).build();
 
         try {
@@ -50,24 +50,24 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public void pause(TriggerRequest request) throws Exception {
         String jobClassName = request.getJobClassName();
-        String jobGroupName = request.getJobGroupName();
-        scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroupName));
+        String jobGroup = request.getJobGroup();
+        scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroup));
     }
 
     @Override
     public void resume(TriggerRequest request) throws Exception {
         String jobClassName = request.getJobClassName();
-        String jobGroupName = request.getJobGroupName();
-        scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroupName));
+        String jobGroup = request.getJobGroup();
+        scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroup));
     }
 
     @Override
     public void reschedule(TriggerRequest request) throws Exception {
         String jobClassName = request.getJobClassName();
-        String jobGroupName = request.getJobGroupName();
+        String jobGroup = request.getJobGroup();
         String cronExpression = request.getCronExpression();
         try {
-            TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroup);
             // 表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
@@ -87,14 +87,14 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public void delete(TriggerRequest request) throws Exception {
         String jobClassName = request.getJobClassName();
-        String jobGroupName = request.getJobGroupName();
-        scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroupName));
-        scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroupName));
-        scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroupName));
+        String jobGroup = request.getJobGroup();
+        scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroup));
+        scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroup));
+        scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroup));
     }
 
     public static BaseJob getClass(String classname) throws Exception {
-        Class<?> class1 = Class.forName(classname);
-        return (BaseJob) class1.newInstance();
+        Class<?> clazz = Class.forName(classname);
+        return (BaseJob) clazz.newInstance();
     }
 }
