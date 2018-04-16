@@ -12,6 +12,9 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * @author guodahai
+ */
 @Configuration
 public class SchedulerConfig {
 
@@ -58,7 +61,7 @@ public class SchedulerConfig {
         JobDetail jobDetail = JobBuilder.newJob(HelloJob.class).withIdentity(HelloJob.class.getName(), Scheduler.DEFAULT_GROUP).build();
 
         //表达式调度构建器(即任务执行的时间)
-        String cronExpression = "0/5 * * * * ?                                                ";
+        String cronExpression = "* * 1 * * ?                                                ";
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
         //按新的cronExpression表达式构建一个新的trigger

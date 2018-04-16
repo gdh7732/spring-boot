@@ -1,6 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dao.JobAndTriggerMapper;
+import com.example.demo.dao.JobAndTriggerRepository;
 import com.example.demo.entity.JobAndTrigger;
 import com.example.demo.service.IJobAndTriggerService;
 import com.github.pagehelper.PageHelper;
@@ -12,21 +12,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+/**
+ * @author guodahai
+ */
 @Service
-public class JobAndTriggerImpl implements IJobAndTriggerService{
+public class JobAndTriggerImpl implements IJobAndTriggerService {
 
-	@Autowired
-	private JobAndTriggerMapper jobAndTriggerMapper;
-	
-	public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
-		List<JobAndTrigger> list = jobAndTriggerMapper.getJobAndTriggerDetails();
-		PageInfo<JobAndTrigger> page = new PageInfo<JobAndTrigger>(list);
-		return page;
-	}
+    @Autowired
+    private JobAndTriggerRepository jobAndTriggerRepository;
 
-	@Scheduled
-	public void  deamo() {
+    @Override
+    public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<JobAndTrigger> list = jobAndTriggerRepository.findAll();
+        PageInfo<JobAndTrigger> page = new PageInfo<>(list);
+        return page;
+    }
 
-	}
+    @Scheduled
+    public void deamo() {
+
+    }
 }

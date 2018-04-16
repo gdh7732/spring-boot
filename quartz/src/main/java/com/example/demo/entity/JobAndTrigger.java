@@ -1,71 +1,168 @@
 package com.example.demo.entity;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 
+/**
+ * @author guodahai
+ */
+@Entity
+@Table(name = "job_trigger")
 public class JobAndTrigger {
-	private String JOB_NAME;
-	private String JOB_GROUP;
-	private String JOB_CLASS_NAME;
-	private String TRIGGER_NAME;
-	private String TRIGGER_GROUP;
-	private BigInteger REPEAT_INTERVAL;
-	private BigInteger TIMES_TRIGGERED;
-	private String CRON_EXPRESSION;
-	private String TIME_ZONE_ID;
-	
-	public String getJOB_NAME() {
-		return JOB_NAME;
-	}
-	public void setJOB_NAME(String jOB_NAME) {
-		JOB_NAME = jOB_NAME;
-	}
-	public String getJOB_GROUP() {
-		return JOB_GROUP;
-	}
-	public void setJOB_GROUP(String jOB_GROUP) {
-		JOB_GROUP = jOB_GROUP;
-	}
-	public String getJOB_CLASS_NAME() {
-		return JOB_CLASS_NAME;
-	}
-	public void setJOB_CLASS_NAME(String jOB_CLASS_NAME) {
-		JOB_CLASS_NAME = jOB_CLASS_NAME;
-	}
-	public String getTRIGGER_NAME() {
-		return TRIGGER_NAME;
-	}
-	public void setTRIGGER_NAME(String tRIGGER_NAME) {
-		TRIGGER_NAME = tRIGGER_NAME;
-	}
-	public String getTRIGGER_GROUP() {
-		return TRIGGER_GROUP;
-	}
-	public void setTRIGGER_GROUP(String tRIGGER_GROUP) {
-		TRIGGER_GROUP = tRIGGER_GROUP;
-	}
-	public BigInteger getREPEAT_INTERVAL() {
-		return REPEAT_INTERVAL;
-	}
-	public void setREPEAT_INTERVAL(BigInteger rEPEAT_INTERVAL) {
-		REPEAT_INTERVAL = rEPEAT_INTERVAL;
-	}
-	public BigInteger getTIMES_TRIGGERED() {
-		return TIMES_TRIGGERED;
-	}
-	public void setTIMES_TRIGGERED(BigInteger tIMES_TRIGGERED) {
-		TIMES_TRIGGERED = tIMES_TRIGGERED;
-	}
-	public String getCRON_EXPRESSION() {
-		return CRON_EXPRESSION;
-	}
-	public void setCRON_EXPRESSION(String cRON_EXPRESSION) {
-		CRON_EXPRESSION = cRON_EXPRESSION;
-	}
-	public String getTIME_ZONE_ID() {
-		return TIME_ZONE_ID;
-	}
-	public void setTIME_ZONE_ID(String tIME_ZONE_ID) {
-		TIME_ZONE_ID = tIME_ZONE_ID;
-	}
-	
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    /**
+     * 任务名称
+     */
+    @Column(name = "job_name")
+    private String jobName;
+    /**
+     * 任务所在组
+     */
+    @Column(name = "job_group")
+    private String jobGroup;
+    /**
+     * 任务类名
+     */
+    @Column(name = "job_classname")
+    private String jobClassName;
+    /**
+     * 触发器名称
+     */
+    @Column(name = "trigger_name")
+    private String triggerName;
+    /**
+     * 触发器所在组
+     */
+    @Column(name = "trigger_group")
+    private String triggerGroup;
+    /**
+     *
+     */
+    @Column(name = "repeat_interval")
+    private BigInteger repeatInterval;
+    /**
+     *
+     */
+    @Column(name = "times_triggered")
+    private BigInteger timesTriggered;
+    /**
+     * 表达式
+     */
+    @Column(name = "cron_expression")
+    private String cronExpression;
+    /**
+     * 时区
+     */
+    @Column(name = "time_zone_id")
+    private String timeZoneId;
+
+    public JobAndTrigger() {
+    }
+
+    public JobAndTrigger(String jobName, String jobGroup, String jobClassName, String triggerName, String triggerGroup) {
+        this.jobName = jobName;
+        this.jobGroup = jobGroup;
+        this.jobClassName = jobClassName;
+        this.triggerName = triggerName;
+        this.triggerGroup = triggerGroup;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public String getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(String jobGroup) {
+        this.jobGroup = jobGroup;
+    }
+
+    public String getJobClassName() {
+        return jobClassName;
+    }
+
+    public void setJobClassName(String jobClassName) {
+        this.jobClassName = jobClassName;
+    }
+
+    public String getTriggerName() {
+        return triggerName;
+    }
+
+    public void setTriggerName(String triggerName) {
+        this.triggerName = triggerName;
+    }
+
+    public String getTriggerGroup() {
+        return triggerGroup;
+    }
+
+    public void setTriggerGroup(String triggerGroup) {
+        this.triggerGroup = triggerGroup;
+    }
+
+    public BigInteger getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    public void setRepeatInterval(BigInteger repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
+
+    public BigInteger getTimesTriggered() {
+        return timesTriggered;
+    }
+
+    public void setTimesTriggered(BigInteger timesTriggered) {
+        this.timesTriggered = timesTriggered;
+    }
+
+    public String getCronExpression() {
+        return cronExpression;
+    }
+
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
+    }
+
+    public String getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    public void setTimeZoneId(String timeZoneId) {
+        this.timeZoneId = timeZoneId;
+    }
+
+    @Override
+    public String toString() {
+        return "JobAndTrigger{" +
+                "id=" + id +
+                ", jobName='" + jobName + '\'' +
+                ", jobGroup='" + jobGroup + '\'' +
+                ", jobClassName='" + jobClassName + '\'' +
+                ", triggerName='" + triggerName + '\'' +
+                ", triggerGroup='" + triggerGroup + '\'' +
+                ", repeatInterval=" + repeatInterval +
+                ", timesTriggered=" + timesTriggered +
+                ", cronExpression='" + cronExpression + '\'' +
+                ", timeZoneId='" + timeZoneId + '\'' +
+                '}';
+    }
 }

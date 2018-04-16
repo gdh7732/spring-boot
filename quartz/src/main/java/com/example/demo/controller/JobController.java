@@ -21,13 +21,16 @@ public class JobController {
     @Autowired
     private IJobAndTriggerService iJobAndTriggerService;
 
-    //加入Qulifier注解，通过名称注入bean
     @Autowired
     @Qualifier("Scheduler")
     private Scheduler scheduler;
 
     private static Logger log = LoggerFactory.getLogger(JobController.class);
 
+    @GetMapping(value = "/index")
+    public String index() throws Exception {
+        return "JobManager.html";
+    }
 
     @PostMapping(value = "/addjob")
     public void addjob(@RequestParam(value = "jobClassName") String jobClassName,
@@ -121,7 +124,7 @@ public class JobController {
 
 
     @GetMapping(value = "/queryjob")
-    public Map<String, Object> queryjob(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
+    public Map<String, Object> queryjob(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         PageInfo<JobAndTrigger> jobAndTrigger = iJobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("JobAndTrigger", jobAndTrigger);
