@@ -31,7 +31,7 @@ public class MultipleDataSource extends AbstractRoutingDataSource {
     }
 
     @Override
-    public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public java.util.logging.Logger getParentLogger() {
         return null;
     }
 }
