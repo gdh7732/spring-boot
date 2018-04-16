@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.JobAndTriggerRepository;
 import com.example.demo.entity.JobAndTrigger;
-import com.example.demo.service.IJobAndTriggerService;
+import com.example.demo.service.JobAndTriggerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author guodahai
  */
 @Service
-public class JobAndTriggerImpl implements IJobAndTriggerService {
+public class JobAndTriggerImpl implements JobAndTriggerService {
 
     @Autowired
     private JobAndTriggerRepository jobAndTriggerRepository;
