@@ -1,18 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.JobAndTrigger;
+import com.example.demo.common.ControllerExecutor;
+import com.example.demo.common.ResponseResult;
+import com.example.demo.common.ServiceException;
 import com.example.demo.entity.TriggerRequest;
 import com.example.demo.service.JobAndTriggerService;
 import com.example.demo.service.SchedulerService;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -35,52 +34,111 @@ public class JobController {
 
     @GetMapping(value = "/index")
     public String index(Model model) throws Exception {
-        PageInfo<JobAndTrigger> jobAndTrigger = triggerService.getJobAndTriggerDetails(1, 10);
-        Map<String, Object> map = new HashMap<>();
-        map.put("JobAndTrigger", jobAndTrigger);
-        map.put("number", jobAndTrigger.getTotal());
-        model.addAllAttributes(map);
         return "index.html";
     }
 
     @PostMapping(value = "/add")
-    public void add(TriggerRequest request) throws Exception {
-        schedulerService.add(request);
-        triggerService.create(request);
+    public ResponseResult<Boolean> add(TriggerRequest request) throws Exception {
+        return new ControllerExecutor<Boolean, TriggerRequest>(request) {
+
+            @Override
+            public void checkParam(TriggerRequest... param) throws Exception {
+
+            }
+
+            @Override
+            public Boolean executeService(TriggerRequest... param) throws Exception {
+                return schedulerService.add(param[0]);
+            }
+        }.execute(request);
+
     }
 
 
     @PostMapping(value = "/pause")
-    public void pause(TriggerRequest request) throws Exception {
-        schedulerService.pause(request);
+    public ResponseResult<Boolean> pause(TriggerRequest request) throws Exception {
+        return new ControllerExecutor<Boolean, TriggerRequest>(request) {
+
+            @Override
+            public void checkParam(TriggerRequest... param) throws Exception {
+
+            }
+
+            @Override
+            public Boolean executeService(TriggerRequest... param) throws Exception {
+                return schedulerService.pause(param[0]);
+            }
+        }.execute(request);
     }
 
 
     @PostMapping(value = "/resume")
-    public void resume(TriggerRequest request) throws Exception {
-        schedulerService.resume(request);
+    public ResponseResult<Boolean> resume(TriggerRequest request) throws Exception {
+        return new ControllerExecutor<Boolean, TriggerRequest>(request) {
+
+            @Override
+            public void checkParam(TriggerRequest... param) throws Exception {
+
+            }
+
+            @Override
+            public Boolean executeService(TriggerRequest... param) throws Exception {
+                return schedulerService.resume(param[0]);
+            }
+        }.execute(request);
     }
 
 
     @PostMapping(value = "/reschedule")
-    public void reschedule(TriggerRequest request) throws Exception {
-        schedulerService.reschedule(request);
+    public ResponseResult<Boolean> reschedule(TriggerRequest request) throws Exception {
+        return new ControllerExecutor<Boolean, TriggerRequest>(request) {
+
+            @Override
+            public void checkParam(TriggerRequest... param) throws Exception {
+
+            }
+
+            @Override
+            public Boolean executeService(TriggerRequest... param) throws Exception {
+                return schedulerService.reschedule(param[0]);
+            }
+        }.execute(request);
+
     }
 
 
     @PostMapping(value = "/delete")
-    public void delete(TriggerRequest request) throws Exception {
-        schedulerService.delete(request);
+    public ResponseResult<Boolean> delete(TriggerRequest request) throws Exception {
+        return new ControllerExecutor<Boolean, TriggerRequest>(request) {
+
+            @Override
+            public void checkParam(TriggerRequest... param) throws Exception {
+
+            }
+
+            @Override
+            public Boolean executeService(TriggerRequest... param) throws Exception {
+                return schedulerService.delete(param[0]);
+            }
+        }.execute(request);
     }
 
 
     @GetMapping(value = "/query")
-    public Map<String, Object> query(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) throws Exception {
-        PageInfo<JobAndTrigger> jobAndTrigger = triggerService.getJobAndTriggerDetails(pageNum, pageSize);
-        Map<String, Object> map = new HashMap<>();
-        map.put("JobAndTrigger", jobAndTrigger);
-        map.put("number", jobAndTrigger.getTotal());
-        return map;
+    public ResponseResult<Map> query(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) throws Exception {
+        return new ControllerExecutor<Map, Integer>(pageNum, pageSize) {
+
+            @Override
+            public void checkParam(Integer... param) throws ServiceException {
+
+            }
+
+            @Override
+            public Map executeService(Integer... param) throws ServiceException {
+                return triggerService.getJobAndTriggerDetails(param[0], param[1]);
+            }
+        }.execute(pageNum, pageSize);
+
     }
 
 
