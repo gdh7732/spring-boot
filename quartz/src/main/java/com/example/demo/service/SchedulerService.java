@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.common.ServiceException;
 import com.example.demo.entity.TriggerRequest;
 
 /**
@@ -11,39 +12,39 @@ public interface SchedulerService {
      * 添加job任务
      *
      * @param request
-     * @throws Exception
+     * @throws ServiceException
      */
-    void add(TriggerRequest request) throws Exception;
+    Boolean add(TriggerRequest request) throws ServiceException;
 
     /**
      * 停止job任务
      *
      * @param request
-     * @throws Exception
+     * @throws ServiceException
      */
-    void pause(TriggerRequest request) throws Exception;
+    Boolean pause(TriggerRequest request) throws ServiceException;
 
     /**
      * 复原job任务
      *
      * @param request
-     * @throws Exception
+     * @throws ServiceException
      */
-    void resume(TriggerRequest request) throws Exception;
+    Boolean resume(TriggerRequest request) throws ServiceException;
 
     /**
      * 重启job任务
      *
      * @param request
-     * @throws Exception
+     * @throws ServiceException
      */
-    void reschedule(TriggerRequest request) throws Exception;
+    Boolean reschedule(TriggerRequest request) throws ServiceException;
 
     /**
      * 删除job任务
      *
      * @param request
-     * @throws Exception
+     * @throws ServiceException
      */
-    void delete(TriggerRequest request) throws Exception;
+    Boolean delete(TriggerRequest request) throws ServiceException;
 }

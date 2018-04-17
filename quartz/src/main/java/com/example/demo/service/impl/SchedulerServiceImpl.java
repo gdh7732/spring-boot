@@ -1,12 +1,21 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.ErrorCodeEnum;
+import com.example.demo.common.ServiceException;
+import com.example.demo.entity.JobAndTrigger;
 import com.example.demo.entity.TriggerRequest;
 import com.example.demo.job.BaseJob;
+import com.example.demo.service.JobAndTriggerService;
 import com.example.demo.service.SchedulerService;
 import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
 
 /**
  * @author guodahai
@@ -15,54 +24,71 @@ import org.springframework.stereotype.Service;
 @Service
 public class SchedulerServiceImpl implements SchedulerService {
 
+    private Logger logger = LoggerFactory.getLogger(SchedulerServiceImpl.class);
+
     @Autowired
     @Qualifier("scheduler")
     private Scheduler scheduler;
 
+    @Autowired
+    private JobAndTriggerService triggerService;
+
+
     @Override
-    public void add(TriggerRequest request) throws Exception {
+    public Boolean add(TriggerRequest request) throws ServiceException {
         String jobClassName = request.getJobClassName();
         String jobGroup = request.getJobGroup();
         String cronExpression = request.getCronExpression();
-
-        // 启动调度器
-        scheduler.start();
-
-        //构建job信息
-        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroup).build();
-
-        //表达式调度构建器(即任务执行的时间)
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
-        //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroup)
-                .withSchedule(scheduleBuilder).build();
-
         try {
+            // 启动调度器
+            scheduler.start();
+            //构建job信息
+            JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroup).build();
+            //表达式调度构建器(即任务执行的时间)
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+            //按新的cronExpression表达式构建一个新的trigger
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroup)
+                    .withSchedule(scheduleBuilder).build();
             scheduler.scheduleJob(jobDetail, trigger);
-
         } catch (SchedulerException e) {
-            System.out.println("创建定时任务失败" + e);
-            throw new Exception("创建定时任务失败");
+            logger.error("创建定时任务失败,trigger:{}", request.toString());
+            throw new ServiceException(ErrorCodeEnum.QUA01);
         }
+        return triggerService.create(request);
     }
 
     @Override
-    public void pause(TriggerRequest request) throws Exception {
+    public Boolean pause(TriggerRequest request) throws ServiceException {
         String jobClassName = request.getJobClassName();
         String jobGroup = request.getJobGroup();
-        scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroup));
+        try {
+            scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroup));
+        } catch (SchedulerException e) {
+            logger.error("暂停定时任务失败,trigger:{}", request.toString());
+            throw new ServiceException(ErrorCodeEnum.QUA01);
+        }
+        JobAndTrigger trigger = triggerService.findOne(request);
+        trigger.setIsPause(BigInteger.ONE);
+        return triggerService.update(trigger);
     }
 
     @Override
-    public void resume(TriggerRequest request) throws Exception {
+    public Boolean resume(TriggerRequest request) throws ServiceException {
         String jobClassName = request.getJobClassName();
         String jobGroup = request.getJobGroup();
-        scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroup));
+        try {
+            scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroup));
+        } catch (SchedulerException e) {
+            logger.error("恢复定时任务失败,trigger:{}", request.toString());
+            throw new ServiceException(ErrorCodeEnum.QUA01);
+        }
+        JobAndTrigger trigger = triggerService.findOne(request);
+        trigger.setIsPause(BigInteger.ZERO);
+        return triggerService.update(trigger);
     }
 
     @Override
-    public void reschedule(TriggerRequest request) throws Exception {
+    public Boolean reschedule(TriggerRequest request) throws ServiceException {
         String jobClassName = request.getJobClassName();
         String jobGroup = request.getJobGroup();
         String cronExpression = request.getCronExpression();
@@ -70,31 +96,43 @@ public class SchedulerServiceImpl implements SchedulerService {
             TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroup);
             // 表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
             CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
             // 按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
             // 按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
         } catch (SchedulerException e) {
-            System.out.println("更新定时任务失败" + e);
-            throw new Exception("更新定时任务失败");
+            logger.error("更新定时任务失败,trigger:{}", request.toString());
+            throw new ServiceException(ErrorCodeEnum.QUA01);
         }
+        JobAndTrigger trigger = triggerService.findOne(request);
+        BeanUtils.copyProperties(request, trigger);
+        return triggerService.update(trigger);
     }
 
     @Override
-    public void delete(TriggerRequest request) throws Exception {
+    public Boolean delete(TriggerRequest request) throws ServiceException {
         String jobClassName = request.getJobClassName();
         String jobGroup = request.getJobGroup();
-        scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroup));
-        scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroup));
-        scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroup));
+        try {
+            scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroup));
+            scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroup));
+            scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroup));
+        } catch (SchedulerException e) {
+            logger.error("删除定时任务失败,trigger:{}", request.toString());
+            throw new ServiceException(ErrorCodeEnum.QUA01);
+        }
+        JobAndTrigger trigger = triggerService.findOne(request);
+        trigger.setIsDelete(BigInteger.ONE);
+        return triggerService.update(trigger);
     }
 
-    public static BaseJob getClass(String classname) throws Exception {
-        Class<?> clazz = Class.forName(classname);
-        return (BaseJob) clazz.newInstance();
+    public static BaseJob getClass(String classname) throws ServiceException {
+        try {
+            Class<?> clazz = Class.forName(classname);
+            return (BaseJob) clazz.newInstance();
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCodeEnum.P99);
+        }
     }
 }
