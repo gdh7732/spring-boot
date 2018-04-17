@@ -39,15 +39,15 @@ public class JobAndTrigger {
     @Column(name = "trigger_group")
     private String triggerGroup;
     /**
-     *
+     * 是否删除0：否，1：是
      */
-    @Column(name = "repeat_interval")
-    private BigInteger repeatInterval;
+    @Column(name = "is_delete")
+    private BigInteger isDelete;
     /**
-     *
+     * 是否暂停0：否，1：是
      */
-    @Column(name = "times_triggered")
-    private BigInteger timesTriggered;
+    @Column(name = "is_pause")
+    private BigInteger isPause;
     /**
      * 表达式
      */
@@ -62,13 +62,6 @@ public class JobAndTrigger {
     public JobAndTrigger() {
     }
 
-    public JobAndTrigger(String jobName, String jobGroup, String jobClassName, String triggerName, String triggerGroup) {
-        this.jobName = jobName;
-        this.jobGroup = jobGroup;
-        this.jobClassName = jobClassName;
-        this.triggerName = triggerName;
-        this.triggerGroup = triggerGroup;
-    }
 
     public Long getId() {
         return id;
@@ -118,20 +111,20 @@ public class JobAndTrigger {
         this.triggerGroup = triggerGroup;
     }
 
-    public BigInteger getRepeatInterval() {
-        return repeatInterval;
+    public BigInteger getIsDelete() {
+        return isDelete;
     }
 
-    public void setRepeatInterval(BigInteger repeatInterval) {
-        this.repeatInterval = repeatInterval;
+    public void setIsDelete(BigInteger isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public BigInteger getTimesTriggered() {
-        return timesTriggered;
+    public BigInteger getIsPause() {
+        return isPause;
     }
 
-    public void setTimesTriggered(BigInteger timesTriggered) {
-        this.timesTriggered = timesTriggered;
+    public void setIsPause(BigInteger isPause) {
+        this.isPause = isPause;
     }
 
     public String getCronExpression() {
@@ -159,8 +152,8 @@ public class JobAndTrigger {
                 ", jobClassName='" + jobClassName + '\'' +
                 ", triggerName='" + triggerName + '\'' +
                 ", triggerGroup='" + triggerGroup + '\'' +
-                ", repeatInterval=" + repeatInterval +
-                ", timesTriggered=" + timesTriggered +
+                ", isDelete=" + isDelete +
+                ", isPause=" + isPause +
                 ", cronExpression='" + cronExpression + '\'' +
                 ", timeZoneId='" + timeZoneId + '\'' +
                 '}';
