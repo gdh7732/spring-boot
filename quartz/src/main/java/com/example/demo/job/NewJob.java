@@ -19,9 +19,7 @@ public class NewJob implements BaseJob {
     }
 
     @Override
-    public void execute(JobExecutionContext context)
-            throws JobExecutionException {
-        logger.error("New Job执行时间: " + new Date());
-
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        logger.warn("New Job执行时间: " + new Date());
     }
 }  

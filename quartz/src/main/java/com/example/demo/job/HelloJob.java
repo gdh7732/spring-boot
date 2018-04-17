@@ -20,7 +20,6 @@ public class HelloJob implements BaseJob {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.error("Hello Job执行时间: " + new Date());
-        System.out.println("helle job");
+        logger.warn("Hello Job执行时间: " + new Date());
     }
 }  
