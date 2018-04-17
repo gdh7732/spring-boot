@@ -4,9 +4,10 @@ INSERT INTO job_trigger (
   job_className,
   trigger_name,
   trigger_group,
-  repeat_interval,
-  times_triggered,
+  is_delete,
+  is_pause,
   cron_expression,
   time_zone_id)
 VALUES
-  ('hello', 'test', 'com.example.demo.job.HelloJob', 'test', 'test', 0, 0, '0/10 * * * * ? *', '北京时间');
+  ('hello', 'test', 'com.example.demo.job.HelloJob', 'test', 'test', 0, 0, '0/10 * * * * ? *', '北京时间'),
+  ('new', 'test', 'com.example.demo.job.NewJob', 'test', 'test', 0, 0, '0/5 * * * * ? *', '北京时间');

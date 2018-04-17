@@ -5,8 +5,8 @@ CREATE TABLE job_trigger (
   job_className   VARCHAR(32)                       NOT NULL,
   trigger_name    VARCHAR(32),
   trigger_group   VARCHAR(32),
-  repeat_interval BIGINT,
-  times_triggered BIGINT,
+  is_delete       BIGINT                            NOT NULL,
+  is_pause        BIGINT                            NOT NULL,
   cron_expression VARCHAR(32)                       NOT NULL,
   time_zone_id    VARCHAR(32),
 );
