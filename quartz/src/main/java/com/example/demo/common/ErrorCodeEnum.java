@@ -8,18 +8,18 @@ package com.example.demo.common;
  */
 public enum ErrorCodeEnum {
 
-    P01("P01", "参数传入不符合规则"),
-    Q01("Q01", "数据库查询失败"),
-    U01("Q01", "数据库更新失败"),
-    I01("Q01", "数据库插入失败"),
-    D01("Q01", "数据库删除失败"),
-    P99("P99", "系统异常"),
-    QUA01("QUA01", "quartz异常");
+    P01(417, "参数传入不符合规则"),
+    Q01(418, "数据库查询失败"),
+    U01(418, "数据库更新失败"),
+    I01(418, "数据库插入失败"),
+    D01(418, "数据库删除失败"),
+    P99(500, "系统异常"),
+    QUA01(419, "quartz异常");
 
-    private String code;
+    private Integer code;
     private String desc;
 
-    ErrorCodeEnum(String code, String desc) {
+    ErrorCodeEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -32,11 +32,11 @@ public enum ErrorCodeEnum {
         this.desc = desc;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 }

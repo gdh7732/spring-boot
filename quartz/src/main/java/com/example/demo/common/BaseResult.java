@@ -11,7 +11,7 @@ public class BaseResult implements Serializable {
     private static final long serialVersionUID = 3962215109252373857L;
 
     private boolean success = true;
-    private String errorCode;
+    private Integer errorCode = 200;
     private String errorMessage;
 
     public BaseResult() {
@@ -26,11 +26,11 @@ public class BaseResult implements Serializable {
         this.success = success;
     }
 
-    public String getErrorCode() {
+    public Integer getErrorCode() {
         return this.errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 

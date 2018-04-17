@@ -14,11 +14,11 @@ public abstract class ControllerExecutor<R, T> {
         this.param = param;
     }
 
-    public abstract void checkParam(T... param) throws Exception;
+    public abstract void checkParam(T... param) throws ServiceException;
 
-    public abstract R executeService(T... param) throws Exception;
+    public abstract R executeService(T... param) throws ServiceException;
 
-    public ResponseResult<R> execute(T... param) throws Exception {
+    public ResponseResult<R> execute(T... param) throws ServiceException {
         ResponseResult<R> result = new ResponseResult<>();
         try {
             R r = executeService(param);

@@ -6,12 +6,17 @@ import com.example.demo.common.ServiceException;
 import com.example.demo.entity.TriggerRequest;
 import com.example.demo.service.JobAndTriggerService;
 import com.example.demo.service.SchedulerService;
+import com.sun.deploy.net.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -32,22 +37,22 @@ public class JobController {
     @Autowired
     private SchedulerService schedulerService;
 
-    @GetMapping(value = "/index")
-    public String index(Model model) throws Exception {
-        return "index.html";
+    @GetMapping
+    public void index(HttpServletResponse response) throws IOException {
+        response.sendRedirect("index.html");
     }
 
     @PostMapping(value = "/add")
-    public ResponseResult<Boolean> add(TriggerRequest request) throws Exception {
+    public ResponseResult<Boolean> add(TriggerRequest request) throws ServiceException {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {
 
             @Override
-            public void checkParam(TriggerRequest... param) throws Exception {
+            public void checkParam(TriggerRequest... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(TriggerRequest... param) throws Exception {
+            public Boolean executeService(TriggerRequest... param) throws ServiceException {
                 return schedulerService.add(param[0]);
             }
         }.execute(request);
@@ -56,16 +61,16 @@ public class JobController {
 
 
     @PostMapping(value = "/pause")
-    public ResponseResult<Boolean> pause(TriggerRequest request) throws Exception {
+    public ResponseResult<Boolean> pause(TriggerRequest request) throws ServiceException {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {
 
             @Override
-            public void checkParam(TriggerRequest... param) throws Exception {
+            public void checkParam(TriggerRequest... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(TriggerRequest... param) throws Exception {
+            public Boolean executeService(TriggerRequest... param) throws ServiceException {
                 return schedulerService.pause(param[0]);
             }
         }.execute(request);
@@ -73,16 +78,16 @@ public class JobController {
 
 
     @PostMapping(value = "/resume")
-    public ResponseResult<Boolean> resume(TriggerRequest request) throws Exception {
+    public ResponseResult<Boolean> resume(TriggerRequest request) throws ServiceException {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {
 
             @Override
-            public void checkParam(TriggerRequest... param) throws Exception {
+            public void checkParam(TriggerRequest... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(TriggerRequest... param) throws Exception {
+            public Boolean executeService(TriggerRequest... param) throws ServiceException {
                 return schedulerService.resume(param[0]);
             }
         }.execute(request);
@@ -94,12 +99,12 @@ public class JobController {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {
 
             @Override
-            public void checkParam(TriggerRequest... param) throws Exception {
+            public void checkParam(TriggerRequest... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(TriggerRequest... param) throws Exception {
+            public Boolean executeService(TriggerRequest... param) throws ServiceException {
                 return schedulerService.reschedule(param[0]);
             }
         }.execute(request);
@@ -112,12 +117,12 @@ public class JobController {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {
 
             @Override
-            public void checkParam(TriggerRequest... param) throws Exception {
+            public void checkParam(TriggerRequest... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(TriggerRequest... param) throws Exception {
+            public Boolean executeService(TriggerRequest... param) throws ServiceException {
                 return schedulerService.delete(param[0]);
             }
         }.execute(request);
