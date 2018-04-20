@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.common;
 
 /**
  * 数据返回Result

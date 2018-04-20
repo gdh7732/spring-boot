@@ -1,12 +1,12 @@
-package com.example.demo.service.impl;
+package com.example.service.impl;
 
-import com.example.demo.common.ErrorCodeEnum;
-import com.example.demo.common.ServiceException;
-import com.example.demo.entity.JobAndTrigger;
-import com.example.demo.entity.TriggerRequest;
-import com.example.demo.job.BaseJob;
-import com.example.demo.service.JobAndTriggerService;
-import com.example.demo.service.SchedulerService;
+import com.example.common.ErrorCodeEnum;
+import com.example.common.ServiceException;
+import com.example.entity.JobAndTrigger;
+import com.example.entity.TriggerRequest;
+import com.example.job.BaseJob;
+import com.example.service.JobAndTriggerService;
+import com.example.service.SchedulerService;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

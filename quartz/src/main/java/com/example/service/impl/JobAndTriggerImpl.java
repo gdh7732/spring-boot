@@ -1,11 +1,11 @@
-package com.example.demo.service.impl;
+package com.example.service.impl;
 
-import com.example.demo.common.ErrorCodeEnum;
-import com.example.demo.common.ServiceException;
-import com.example.demo.dao.JobAndTriggerRepository;
-import com.example.demo.entity.JobAndTrigger;
-import com.example.demo.entity.TriggerRequest;
-import com.example.demo.service.JobAndTriggerService;
+import com.example.common.ErrorCodeEnum;
+import com.example.common.ServiceException;
+import com.example.dao.JobAndTriggerRepository;
+import com.example.entity.JobAndTrigger;
+import com.example.entity.TriggerRequest;
+import com.example.service.JobAndTriggerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;

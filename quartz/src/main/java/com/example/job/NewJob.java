@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.job;
 
 import java.util.Date;
 

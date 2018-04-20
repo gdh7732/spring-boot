@@ -1,10 +1,9 @@
-package com.example.demo.service;
+package com.example.service;
 
 
-import com.example.demo.common.ServiceException;
-import com.example.demo.entity.JobAndTrigger;
-import com.example.demo.entity.TriggerRequest;
-import com.github.pagehelper.PageInfo;
+import com.example.common.ServiceException;
+import com.example.entity.JobAndTrigger;
+import com.example.entity.TriggerRequest;
 
 import java.util.List;
 import java.util.Map;

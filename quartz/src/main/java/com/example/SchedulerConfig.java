@@ -1,9 +1,8 @@
-package com.example.demo;
+package com.example;
 
-import com.example.demo.entity.JobAndTrigger;
-import com.example.demo.job.BaseJob;
-import com.example.demo.job.HelloJob;
-import com.example.demo.service.JobAndTriggerService;
+import com.example.entity.JobAndTrigger;
+import com.example.job.BaseJob;
+import com.example.service.JobAndTriggerService;
 import org.quartz.*;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.springframework.beans.factory.annotation.Autowired;

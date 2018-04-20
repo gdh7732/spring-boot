@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.common;
 
 /**
  * 自定义异常

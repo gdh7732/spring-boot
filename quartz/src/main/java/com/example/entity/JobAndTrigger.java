@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.entity;
 
 import javax.persistence.*;
 import java.math.BigInteger;

@@ -1,7 +1,7 @@
-package com.example.demo.service;
+package com.example.service;
 
-import com.example.demo.common.ServiceException;
-import com.example.demo.entity.TriggerRequest;
+import com.example.common.ServiceException;
+import com.example.entity.TriggerRequest;
 
 /**
  * @author guodahai

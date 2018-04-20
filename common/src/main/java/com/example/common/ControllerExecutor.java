@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.common;
 
 /**
  * 控制层执行抽象类

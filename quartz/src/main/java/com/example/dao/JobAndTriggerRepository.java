@@ -1,9 +1,7 @@
-package com.example.demo.dao;
+package com.example.dao;
 
-import com.example.demo.entity.JobAndTrigger;
+import com.example.entity.JobAndTrigger;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 /**
  * @author guodahai

@@ -1,20 +1,16 @@
-package com.example.demo.controller;
+package com.example.controller;
 
-import com.example.demo.common.ControllerExecutor;
-import com.example.demo.common.ResponseResult;
-import com.example.demo.common.ServiceException;
-import com.example.demo.entity.TriggerRequest;
-import com.example.demo.service.JobAndTriggerService;
-import com.example.demo.service.SchedulerService;
-import com.sun.deploy.net.HttpResponse;
+import com.example.common.ControllerExecutor;
+import com.example.common.ResponseResult;
+import com.example.common.ServiceException;
+import com.example.entity.TriggerRequest;
+import com.example.service.JobAndTriggerService;
+import com.example.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
