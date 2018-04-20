@@ -1,7 +1,5 @@
 package com.example.rabbitmq;
 
-import com.example.rabbit.many.NeoSenderOne;
-import com.example.rabbit.many.NeoSenderTwo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

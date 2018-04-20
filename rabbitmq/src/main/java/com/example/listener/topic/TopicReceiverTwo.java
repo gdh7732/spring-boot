@@ -1,5 +1,7 @@
-package com.example.rabbit.topic;
+package com.example.listener.topic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -11,9 +13,11 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "topic.messages")
 public class TopicReceiverTwo {
 
+    private final Logger logger = LoggerFactory.getLogger(TopicReceiverTwo.class);
+
     @RabbitHandler
     public void process(String message) {
-        System.out.println("Topic ReceiverTwo  : " + message);
+        logger.warn("Topic ReceiverTwo  : " + message);
     }
 
 }

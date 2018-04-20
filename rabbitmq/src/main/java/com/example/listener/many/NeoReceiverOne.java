@@ -1,5 +1,7 @@
-package com.example.rabbit.many;
+package com.example.listener.many;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -9,11 +11,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RabbitListener(queues = "neo")
-public class NeoReceiverTwo {
+public class NeoReceiverOne {
+
+    private final Logger logger = LoggerFactory.getLogger(NeoReceiverOne.class);
 
     @RabbitHandler
     public void process(String neo) {
-        System.out.println("ReceiverTwo: " + neo);
+        logger.warn("ReceiverOne: " + neo);
     }
 
 }

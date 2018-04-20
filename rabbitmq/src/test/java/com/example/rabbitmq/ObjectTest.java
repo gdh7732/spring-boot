@@ -1,7 +1,6 @@
 package com.example.rabbitmq;
 
 import com.example.model.User;
-import com.example.rabbit.object.ObjectSender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
