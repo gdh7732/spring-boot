@@ -26,6 +26,7 @@
         <module>spring</module>
         <module>mybatis</module>
         <module>rabbitmq</module>
+        <module>common</module>
     </modules>
 
     <properties>
