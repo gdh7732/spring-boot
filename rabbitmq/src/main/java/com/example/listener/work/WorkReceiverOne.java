@@ -1,4 +1,4 @@
-package com.example.listener.many;
+package com.example.listener.work;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
  * @author guodahai
  */
 @Component
-@RabbitListener(queues = "neo")
-public class NeoReceiverTwo {
+@RabbitListener(queues = "work")
+public class WorkReceiverOne {
 
-    private final Logger logger = LoggerFactory.getLogger(NeoReceiverTwo.class);
+    private final Logger logger = LoggerFactory.getLogger(WorkReceiverOne.class);
 
     @RabbitHandler
-    public void process(String neo) {
-        logger.warn("ReceiverOne: " + neo);
+    public void process(String message) {
+        logger.warn("ReceiverOne: " + message);
     }
 
 }

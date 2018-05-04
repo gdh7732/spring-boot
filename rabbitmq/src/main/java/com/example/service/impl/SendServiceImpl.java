@@ -2,7 +2,7 @@ package com.example.service.impl;
 
 import com.example.common.ErrorCodeEnum;
 import com.example.common.ServiceException;
-import com.example.model.SendRequest;
+import com.example.model.Message;
 import com.example.service.SendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +23,10 @@ public class SendServiceImpl implements SendService {
     private AmqpTemplate rabbitTemplate;
 
     @Override
-    public Boolean send(SendRequest request) throws ServiceException {
+    public Boolean send(Message request) throws ServiceException {
         String exchange = request.getExchange();
-        String routingKey = request.getRoutingKey();
-        Object object = request.getObject();
+        String routingKey = request.getRouteKey();
+        Object object = request.getMsg();
         try {
             if (null == exchange) {
                 send(routingKey, object);

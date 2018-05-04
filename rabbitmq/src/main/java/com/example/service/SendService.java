@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.common.ServiceException;
-import com.example.model.SendRequest;
+import com.example.model.Message;
 
 /**
  * @author guodahai
@@ -15,7 +15,7 @@ public interface SendService {
      * @param request
      * @return
      */
-    Boolean send(SendRequest request) throws ServiceException;
+    Boolean send(Message request) throws ServiceException;
 
     /**
      * 简单模式、工作队列模式

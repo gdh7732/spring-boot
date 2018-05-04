@@ -9,7 +9,12 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
+ * Exchange四种模式之一：Fanout
+ * 提前绑定Exchange，不需要指定RouteKey
+ * 一个生产者、一个交换机、多个队列、多个消费者
+ *
  * @author guodahai
+ * @version 2018/5/4 下午3:38
  */
 @Configuration
 public class FanoutRabbitConfig {

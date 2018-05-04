@@ -4,7 +4,7 @@ package com.example.model;
  * @author guodahai
  * @version 2018/4/20 下午3:53
  */
-public class SendRequest {
+public class Message {
 
     /**
      * 交换机
@@ -13,11 +13,11 @@ public class SendRequest {
     /**
      * key
      */
-    private String routingKey;
+    private String routeKey;
     /**
      * 消息内容
      */
-    private Object object;
+    private Object msg;
 
     public String getExchange() {
         return exchange;
@@ -27,28 +27,28 @@ public class SendRequest {
         this.exchange = exchange;
     }
 
-    public String getRoutingKey() {
-        return routingKey;
+    public String getRouteKey() {
+        return routeKey;
     }
 
-    public void setRoutingKey(String routingKey) {
-        this.routingKey = routingKey;
+    public void setRouteKey(String routeKey) {
+        this.routeKey = routeKey;
     }
 
-    public Object getObject() {
-        return object;
+    public Object getMsg() {
+        return msg;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void setMsg(Object msg) {
+        this.msg = msg;
     }
 
     @Override
     public String toString() {
-        return "SendRequest{" +
+        return "Message{" +
                 "exchange='" + exchange + '\'' +
-                ", routingKey='" + routingKey + '\'' +
-                ", object=" + object +
+                ", routeKey='" + routeKey + '\'' +
+                ", msg=" + msg +
                 '}';
     }
 }

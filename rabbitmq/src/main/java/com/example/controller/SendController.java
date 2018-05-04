@@ -3,7 +3,7 @@ package com.example.controller;
 import com.example.common.ControllerExecutor;
 import com.example.common.ResponseResult;
 import com.example.common.ServiceException;
-import com.example.model.SendRequest;
+import com.example.model.Message;
 import com.example.service.SendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +20,16 @@ public class SendController {
     private SendService sendService;
 
     @PostMapping
-    public ResponseResult sendHello(@RequestBody SendRequest request) {
-        return new ControllerExecutor<Boolean, SendRequest>(request) {
+    public ResponseResult sendHello(@RequestBody Message request) {
+        return new ControllerExecutor<Boolean, Message>(request) {
 
             @Override
-            public void checkParam(SendRequest... param) throws ServiceException {
+            public void checkParam(Message... param) throws ServiceException {
 
             }
 
             @Override
-            public Boolean executeService(SendRequest... param) throws ServiceException {
+            public Boolean executeService(Message... param) throws ServiceException {
                 return sendService.send(request);
             }
         }.execute(request);

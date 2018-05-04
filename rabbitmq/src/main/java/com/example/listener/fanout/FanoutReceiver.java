@@ -7,6 +7,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
+ * Fanout模式
+ *
  * @author guodahai
  */
 @Component
@@ -14,6 +16,11 @@ public class FanoutReceiver {
 
     private final Logger logger = LoggerFactory.getLogger(FanoutReceiver.class);
 
+    /**
+     * 方法级别Listener
+     *
+     * @param message
+     */
     @RabbitHandler
     @RabbitListener(queues = "fanout.A")
     public void processA(String message) {
