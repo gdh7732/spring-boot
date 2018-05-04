@@ -9,5 +9,5 @@ INSERT INTO job_trigger (
   cron_expression,
   time_zone_id)
 VALUES
-  ('hello', 'test', 'HelloJob', 'test', 'test', 0, 0, '0/10 * * * * ? *', '北京时间'),
-  ('new', 'test', 'NewJob', 'test', 'test', 0, 0, '0/5 * * * * ? *', '北京时间');
+  ('hello', 'test', 'com.example.job.HelloJob', 'test', 'test', 0, 0, '0/10 * * * * ? *', '北京时间'),
+  ('new', 'test', 'com.example.job.NewJob', 'test', 'test', 0, 0, '0/5 * * * * ? *', '北京时间');
