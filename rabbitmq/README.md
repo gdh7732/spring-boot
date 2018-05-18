@@ -13,6 +13,9 @@
     当有多个worker同时运行时，任务将在它们之间共享。
     生产者:只需指定routingKey;  rabbitTemplate.convertAndSend(routingKey, object);
     消费者:多个消费者监听同一队列 @RabbitListener(queues = "work")
+    
+    1.3 路由模式 Routing
+    说明：生产者发送消息到交换机并且要指定路由key，消费者将队列绑定到交换机时需要指定路由key
 
 2、fanout模式
     
