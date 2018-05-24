@@ -1,0 +1,11 @@
+notifications:
+  email:
+    recipients:
+      - pufang@maihaoche.com
+
+language: java
+
+sudo: false
+script:
+  - travis_retry mvn -B clean
+  - travis_retry mvn -B package jacoco:report coveralls:report
