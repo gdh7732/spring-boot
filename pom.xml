@@ -27,6 +27,7 @@
         <module>mybatis</module>
         <module>rabbitmq</module>
         <module>common</module>
+        <module>rocketmq</module>
     </modules>
 
     <properties>
@@ -44,6 +45,7 @@
         <druid.version>1.1.9</druid.version>
         <pagehelper.version>5.0.1</pagehelper.version>
         <solr-solrj.version>4.10.3</solr-solrj.version>
+        <rockectmq.version>3.2.5</rockectmq.version>
     </properties>
 
     <dependencies>
@@ -134,6 +136,17 @@
                 <groupId>org.apache.solr</groupId>
                 <artifactId>solr-solrj</artifactId>
                 <version>4.10.3</version>
+            </dependency>
+            <!--rocketmq-->
+            <dependency>
+                <groupId>com.alibaba.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rockectmq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.rocketmq</groupId>
+                <artifactId>rocketmq-common</artifactId>
+                <version>${rockectmq.version}</version>
             </dependency>
         </dependencies>
 
