@@ -1,8 +1,8 @@
 package com.example.base;
 
 import com.google.gson.Gson;
-import com.maihaoche.starter.mq.annotation.MQKey;
-import com.maihaoche.starter.mq.enums.DelayTimeLevel;
+import com.example.annotation.MQKey;
+import com.example.enums.DelayTimeLevel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

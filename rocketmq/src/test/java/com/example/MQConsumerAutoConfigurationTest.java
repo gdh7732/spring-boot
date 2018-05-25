@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class MQConsumerAutoConfigurationTest {

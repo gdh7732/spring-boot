@@ -1,6 +1,6 @@
 package com.example.base;
 
-import com.maihaoche.starter.mq.MQException;
+import com.example.MQException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;

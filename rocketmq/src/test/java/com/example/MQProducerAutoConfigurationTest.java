@@ -1,12 +1,9 @@
 package com.example;
 
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.example.annotation.MQProducer;
 import com.example.base.AbstractMQProducer;
 import com.example.config.MQBaseAutoConfiguration;
 import com.example.config.MQProducerAutoConfiguration;
-import com.maihaoche.starter.mq.annotation.MQProducer;
-import com.maihaoche.starter.mq.base.AbstractMQProducer;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.junit.After;
 import org.junit.Test;
@@ -14,8 +11,7 @@ import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class MQProducerAutoConfigurationTest {
 
