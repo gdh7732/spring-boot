@@ -194,12 +194,15 @@
     </dependencyManagement>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -210,6 +213,7 @@
                 </includes>
             </resource>
         </resources>
+
     </build>
 
 </project>

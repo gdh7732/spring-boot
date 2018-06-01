@@ -1,0 +1,7 @@
+mvn clean package docker:build -Dmaven.test.skip=true
+
+docker images
+
+docker rmi
+
+docker ps
