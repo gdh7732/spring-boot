@@ -6,6 +6,8 @@ import com.example.common.ServiceException;
 import com.example.entity.TriggerRequest;
 import com.example.service.JobAndTriggerService;
 import com.example.service.SchedulerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/job")
+@Api("JobController相关api")
 public class JobController {
 
     private static Logger logger = LoggerFactory.getLogger(JobController.class);
@@ -38,6 +41,7 @@ public class JobController {
         response.sendRedirect("index.html");
     }
 
+    @ApiOperation("添加定时任务")
     @PostMapping(value = "/add")
     public ResponseResult<Boolean> add(TriggerRequest request) throws ServiceException {
         return new ControllerExecutor<Boolean, TriggerRequest>(request) {

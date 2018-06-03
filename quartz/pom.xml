@@ -84,10 +84,20 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.13</version>
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <imageName>ocean/quartz:0.0.1</imageName>
-                    <baseImage>java</baseImage>
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <!--<baseImage>java</baseImage>-->
+                    <!--<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>-->
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>

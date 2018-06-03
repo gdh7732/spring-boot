@@ -1,5 +1,9 @@
 mvn clean package docker:build -Dmaven.test.skip=true
 
+mvn clean package docker:build -pl quartz -am -Dmaven.test.skip=true
+
+mvn clean package -pl quartz -am -Dmaven.test.skip=true
+
 docker images
 
 docker rmi
