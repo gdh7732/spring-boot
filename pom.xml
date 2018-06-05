@@ -51,6 +51,8 @@
         <junit.version>4.12</junit.version>
         <assertj.version>3.9.1</assertj.version>
         <swagger.version>2.6.1</swagger.version>
+        <docker.repository>registry.cn-hangzhou.aliyuncs.com</docker.repository>
+        <docker.registry.name>gdh7732</docker.registry.name>
     </properties>
 
     <dependencies>
@@ -197,9 +199,14 @@
 
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
+
 
         </plugins>
 
@@ -216,11 +223,11 @@
 
     </build>
 
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>aliyunmaven</id>-->
-            <!--<url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
-        <!--</repository>-->
-    <!--</repositories>-->
+    <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
 </project>
