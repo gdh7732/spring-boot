@@ -8,13 +8,13 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>spring—boot</name>
+    <name>spring-boot</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -28,6 +28,7 @@
         <module>rabbitmq</module>
         <module>common</module>
         <module>rocketmq</module>
+        <module>eureka-server</module>
     </modules>
 
     <properties>
@@ -196,7 +197,6 @@
     </dependencyManagement>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -206,8 +206,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-
         </plugins>
 
         <resources>
@@ -220,13 +218,21 @@
                 </includes>
             </resource>
         </resources>
-
     </build>
 
     <repositories>
         <repository>
-            <id>aliyunmaven</id>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
