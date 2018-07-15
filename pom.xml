@@ -29,6 +29,8 @@
         <module>common</module>
         <module>rocketmq</module>
         <module>eureka-server</module>
+        <module>eureka-provider</module>
+        <module>eureka-customer</module>
     </modules>
 
     <properties>
