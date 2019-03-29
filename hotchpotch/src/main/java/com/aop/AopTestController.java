@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by zkn on 2016/11/19.
+ *
+ * @author guodahai
+ * @date 2016/11/19
  */
 @RestController
 @RequestMapping("/aop")
