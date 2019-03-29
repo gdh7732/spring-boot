@@ -20,10 +20,8 @@
 
     <modules>
         <module>activemq</module>
-        <module>quartz</module>
         <module>solr</module>
-        <module>thread</module>
-        <module>spring</module>
+        <module>hotchpotch</module>
         <module>mybatis</module>
         <module>rabbitmq</module>
         <module>common</module>

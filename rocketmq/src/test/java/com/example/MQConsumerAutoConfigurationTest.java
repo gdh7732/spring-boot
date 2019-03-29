@@ -3,7 +3,7 @@ package com.example;
 import com.example.annotation.MQConsumer;
 import com.example.base.AbstractMQPushConsumer;
 import com.example.base.MessageExtConst;
-import com.example.config.MQConsumerAutoConfiguration;
+import com.thread.config.MQConsumerAutoConfiguration;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
