@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -14,10 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RedisClientTest {
+public class RedisTemplateTest {
 
     @Autowired
-    private RedisClient redisClient;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Test
     public void expire() {
@@ -33,17 +37,27 @@ public class RedisClientTest {
 
     @Test
     public void del() {
-        redisClient.del("name");
+
     }
 
     @Test
     public void get() {
-        System.out.println(redisClient.get("test1"));
     }
 
+    /**
+     * SET name "gdh" result: "name":"gdh"
+     */
     @Test
     public void set() {
-        redisClient.set("name", "gdh");
+        redisTemplate.opsForValue().set("name", "gdh");
+    }
+
+    /**
+     * SET name "gdh" result: name:"gdh"
+     */
+    @Test
+    public void set2() {
+        stringRedisTemplate.opsForValue().set("name", "gdh");
     }
 
     @Test
