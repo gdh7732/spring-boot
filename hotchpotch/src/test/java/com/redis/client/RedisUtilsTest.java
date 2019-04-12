@@ -1,41 +1,39 @@
-package com.redis.client.impl;
+package com.redis.client;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.stereotype.Service;
-
-import com.redis.client.RedisClient;
-
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author guodahai
- * @version 2019/3/29 15:41
+ * Redis工具类
+ *
+ * @author WangFan
+ * @version 1.1 (GitHub文档: https://github.com/whvcse/RedisUtil )
+ * @date 2018-02-24 下午03:09:50
  */
-@SuppressWarnings("all")
-@Service("redisClient")
-public class RedisClientImpl implements RedisClient {
-    private final Logger logger = LoggerFactory.getLogger(RedisClientImpl.class);
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class RedisUtilsTest {
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
-    /**
-     * -------------------key相关操作---------------------
-     */
+    /** -------------------key相关操作--------------------- */
+
     /**
      * 删除key
      *
      * @param key
      */
-    @Override
     public void delete(String key) {
         redisTemplate.delete(key);
     }
@@ -45,7 +43,6 @@ public class RedisClientImpl implements RedisClient {
      *
      * @param keys
      */
-    @Override
     public void delete(Collection<String> keys) {
         redisTemplate.delete(keys);
     }
@@ -56,7 +53,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public byte[] dump(String key) {
         return redisTemplate.dump(key);
     }
@@ -67,7 +63,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
@@ -80,7 +75,6 @@ public class RedisClientImpl implements RedisClient {
      * @param unit
      * @return
      */
-    @Override
     public Boolean expire(String key, long timeout, TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
     }
@@ -92,7 +86,6 @@ public class RedisClientImpl implements RedisClient {
      * @param date
      * @return
      */
-    @Override
     public Boolean expireAt(String key, Date date) {
         return redisTemplate.expireAt(key, date);
     }
@@ -103,7 +96,6 @@ public class RedisClientImpl implements RedisClient {
      * @param pattern
      * @return
      */
-    @Override
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
     }
@@ -115,7 +107,6 @@ public class RedisClientImpl implements RedisClient {
      * @param dbIndex
      * @return
      */
-    @Override
     public Boolean move(String key, int dbIndex) {
         return redisTemplate.move(key, dbIndex);
     }
@@ -126,7 +117,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Boolean persist(String key) {
         return redisTemplate.persist(key);
     }
@@ -138,7 +128,6 @@ public class RedisClientImpl implements RedisClient {
      * @param unit
      * @return
      */
-    @Override
     public Long getExpire(String key, TimeUnit unit) {
         return redisTemplate.getExpire(key, unit);
     }
@@ -149,7 +138,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long getExpire(String key) {
         return redisTemplate.getExpire(key);
     }
@@ -159,7 +147,6 @@ public class RedisClientImpl implements RedisClient {
      *
      * @return
      */
-    @Override
     public String randomKey() {
         return redisTemplate.randomKey();
     }
@@ -170,7 +157,6 @@ public class RedisClientImpl implements RedisClient {
      * @param oldKey
      * @param newKey
      */
-    @Override
     public void rename(String oldKey, String newKey) {
         redisTemplate.rename(oldKey, newKey);
     }
@@ -182,7 +168,6 @@ public class RedisClientImpl implements RedisClient {
      * @param newKey
      * @return
      */
-    @Override
     public Boolean renameIfAbsent(String oldKey, String newKey) {
         return redisTemplate.renameIfAbsent(oldKey, newKey);
     }
@@ -193,19 +178,18 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public DataType type(String key) {
         return redisTemplate.type(key);
     }
 
     /** -------------------string相关操作--------------------- */
+
     /**
      * 设置指定 key 的值
      *
      * @param key
      * @param value
      */
-    @Override
     public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
@@ -216,8 +200,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
-    public Object get(String key) {
+    public String get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
@@ -229,7 +212,6 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
     public String getRange(String key, long start, long end) {
         return redisTemplate.opsForValue().get(key, start, end);
     }
@@ -241,8 +223,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Object getAndSet(String key, String value) {
+    public String getAndSet(String key, String value) {
         return redisTemplate.opsForValue().getAndSet(key, value);
     }
 
@@ -253,7 +234,6 @@ public class RedisClientImpl implements RedisClient {
      * @param offset
      * @return
      */
-    @Override
     public Boolean getBit(String key, long offset) {
         return redisTemplate.opsForValue().getBit(key, offset);
     }
@@ -264,8 +244,7 @@ public class RedisClientImpl implements RedisClient {
      * @param keys
      * @return
      */
-    @Override
-    public List<Object> multiGet(Collection<String> keys) {
+    public List<String> multiGet(Collection<String> keys) {
         return redisTemplate.opsForValue().multiGet(keys);
     }
 
@@ -276,7 +255,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value 值,true为1, false为0
      * @return
      */
-    @Override
     public boolean setBit(String key, long offset, boolean value) {
         return redisTemplate.opsForValue().setBit(key, offset, value);
     }
@@ -290,7 +268,6 @@ public class RedisClientImpl implements RedisClient {
      * @param unit    时间单位, 天:TimeUnit.DAYS 小时:TimeUnit.HOURS 分钟:TimeUnit.MINUTES
      *                秒:TimeUnit.SECONDS 毫秒:TimeUnit.MILLISECONDS
      */
-    @Override
     public void setEx(String key, String value, long timeout, TimeUnit unit) {
         redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
@@ -302,7 +279,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return 之前已经存在返回false, 不存在返回true
      */
-    @Override
     public boolean setIfAbsent(String key, String value) {
         return redisTemplate.opsForValue().setIfAbsent(key, value);
     }
@@ -314,7 +290,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @param offset 从指定位置开始覆写
      */
-    @Override
     public void setRange(String key, String value, long offset) {
         redisTemplate.opsForValue().set(key, value, offset);
     }
@@ -325,7 +300,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long size(String key) {
         return redisTemplate.opsForValue().size(key);
     }
@@ -335,7 +309,6 @@ public class RedisClientImpl implements RedisClient {
      *
      * @param maps
      */
-    @Override
     public void multiSet(Map<String, String> maps) {
         redisTemplate.opsForValue().multiSet(maps);
     }
@@ -346,7 +319,6 @@ public class RedisClientImpl implements RedisClient {
      * @param maps
      * @return 之前已经存在返回false, 不存在返回true
      */
-    @Override
     public boolean multiSetIfAbsent(Map<String, String> maps) {
         return redisTemplate.opsForValue().multiSetIfAbsent(maps);
     }
@@ -357,7 +329,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long incrBy(String key, long increment) {
         return redisTemplate.opsForValue().increment(key, increment);
     }
@@ -366,7 +337,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Double incrByFloat(String key, double increment) {
         return redisTemplate.opsForValue().increment(key, increment);
     }
@@ -378,12 +348,12 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
     public Integer append(String key, String value) {
         return redisTemplate.opsForValue().append(key, value);
     }
 
     /** -------------------hash相关操作------------------------- */
+
     /**
      * 获取存储在哈希表中指定字段的值
      *
@@ -391,7 +361,6 @@ public class RedisClientImpl implements RedisClient {
      * @param field
      * @return
      */
-    @Override
     public Object hGet(String key, String field) {
         return redisTemplate.opsForHash().get(key, field);
     }
@@ -402,7 +371,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Map<Object, Object> hGetAll(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
@@ -414,17 +382,14 @@ public class RedisClientImpl implements RedisClient {
      * @param fields
      * @return
      */
-    @Override
     public List<Object> hMultiGet(String key, Collection<Object> fields) {
         return redisTemplate.opsForHash().multiGet(key, fields);
     }
 
-    @Override
     public void hPut(String key, String hashKey, String value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
 
-    @Override
     public void hPutAll(String key, Map<String, String> maps) {
         redisTemplate.opsForHash().putAll(key, maps);
     }
@@ -437,7 +402,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
     public Boolean hPutIfAbsent(String key, String hashKey, String value) {
         return redisTemplate.opsForHash().putIfAbsent(key, hashKey, value);
     }
@@ -449,7 +413,6 @@ public class RedisClientImpl implements RedisClient {
      * @param fields
      * @return
      */
-    @Override
     public Long hDelete(String key, Object... fields) {
         return redisTemplate.opsForHash().delete(key, fields);
     }
@@ -461,7 +424,6 @@ public class RedisClientImpl implements RedisClient {
      * @param field
      * @return
      */
-    @Override
     public boolean hExists(String key, String field) {
         return redisTemplate.opsForHash().hasKey(key, field);
     }
@@ -474,7 +436,6 @@ public class RedisClientImpl implements RedisClient {
      * @param increment
      * @return
      */
-    @Override
     public Long hIncrBy(String key, Object field, long increment) {
         return redisTemplate.opsForHash().increment(key, field, increment);
     }
@@ -487,7 +448,6 @@ public class RedisClientImpl implements RedisClient {
      * @param delta
      * @return
      */
-    @Override
     public Double hIncrByFloat(String key, Object field, double delta) {
         return redisTemplate.opsForHash().increment(key, field, delta);
     }
@@ -498,7 +458,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Set<Object> hKeys(String key) {
         return redisTemplate.opsForHash().keys(key);
     }
@@ -509,7 +468,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long hSize(String key) {
         return redisTemplate.opsForHash().size(key);
     }
@@ -520,7 +478,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public List<Object> hValues(String key) {
         return redisTemplate.opsForHash().values(key);
     }
@@ -532,12 +489,12 @@ public class RedisClientImpl implements RedisClient {
      * @param options
      * @return
      */
-    @Override
-    public Cursor<Map.Entry<Object, Object>> hScan(String key, ScanOptions options) {
+    public Cursor<Entry<Object, Object>> hScan(String key, ScanOptions options) {
         return redisTemplate.opsForHash().scan(key, options);
     }
 
     /** ------------------------list相关操作---------------------------- */
+
     /**
      * 通过索引获取列表中的元素
      *
@@ -545,8 +502,7 @@ public class RedisClientImpl implements RedisClient {
      * @param index
      * @return
      */
-    @Override
-    public Object lIndex(String key, long index) {
+    public String lIndex(String key, long index) {
         return redisTemplate.opsForList().index(key, index);
     }
 
@@ -558,8 +514,7 @@ public class RedisClientImpl implements RedisClient {
      * @param end   结束位置, -1返回所有
      * @return
      */
-    @Override
-    public List<Object> lRange(String key, long start, long end) {
+    public List<String> lRange(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
@@ -570,8 +525,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lLeftPush(String key, Object value) {
+    public Long lLeftPush(String key, String value) {
         return redisTemplate.opsForList().leftPush(key, value);
     }
 
@@ -580,8 +534,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lLeftPushAll(String key, Object... value) {
+    public Long lLeftPushAll(String key, String... value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
 
@@ -590,8 +543,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lLeftPushAll(String key, Collection<Object> value) {
+    public Long lLeftPushAll(String key, Collection<String> value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
 
@@ -602,8 +554,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lLeftPushIfPresent(String key, Object value) {
+    public Long lLeftPushIfPresent(String key, String value) {
         return redisTemplate.opsForList().leftPushIfPresent(key, value);
     }
 
@@ -615,8 +566,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lLeftPush(String key, Object pivot, Object value) {
+    public Long lLeftPush(String key, String pivot, String value) {
         return redisTemplate.opsForList().leftPush(key, pivot, value);
     }
 
@@ -625,8 +575,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRightPush(String key, Object value) {
+    public Long lRightPush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
@@ -635,8 +584,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRightPushAll(String key, Object... value) {
+    public Long lRightPushAll(String key, String... value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
 
@@ -645,8 +593,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRightPushAll(String key, Collection<Object> value) {
+    public Long lRightPushAll(String key, Collection<String> value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
 
@@ -657,8 +604,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRightPushIfPresent(String key, Object value) {
+    public Long lRightPushIfPresent(String key, String value) {
         return redisTemplate.opsForList().rightPushIfPresent(key, value);
     }
 
@@ -670,8 +616,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRightPush(String key, Object pivot, Object value) {
+    public Long lRightPush(String key, String pivot, String value) {
         return redisTemplate.opsForList().rightPush(key, pivot, value);
     }
 
@@ -682,8 +627,7 @@ public class RedisClientImpl implements RedisClient {
      * @param index 位置
      * @param value
      */
-    @Override
-    public void lSet(String key, long index, Object value) {
+    public void lSet(String key, long index, String value) {
         redisTemplate.opsForList().set(key, index, value);
     }
 
@@ -693,8 +637,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return 删除的元素
      */
-    @Override
-    public Object lLeftPop(String key) {
+    public String lLeftPop(String key) {
         return redisTemplate.opsForList().leftPop(key);
     }
 
@@ -706,8 +649,7 @@ public class RedisClientImpl implements RedisClient {
      * @param unit    时间单位
      * @return
      */
-    @Override
-    public Object lBLeftPop(String key, long timeout, TimeUnit unit) {
+    public String lBLeftPop(String key, long timeout, TimeUnit unit) {
         return redisTemplate.opsForList().leftPop(key, timeout, unit);
     }
 
@@ -717,8 +659,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return 删除的元素
      */
-    @Override
-    public Object lRightPop(String key) {
+    public String lRightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
     }
 
@@ -730,8 +671,7 @@ public class RedisClientImpl implements RedisClient {
      * @param unit    时间单位
      * @return
      */
-    @Override
-    public Object lBRightPop(String key, long timeout, TimeUnit unit) {
+    public String lBRightPop(String key, long timeout, TimeUnit unit) {
         return redisTemplate.opsForList().rightPop(key, timeout, unit);
     }
 
@@ -742,9 +682,9 @@ public class RedisClientImpl implements RedisClient {
      * @param destinationKey
      * @return
      */
-    @Override
-    public Object lRightPopAndLeftPush(String sourceKey, String destinationKey) {
-        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey);
+    public String lRightPopAndLeftPush(String sourceKey, String destinationKey) {
+        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey,
+                destinationKey);
     }
 
     /**
@@ -756,9 +696,10 @@ public class RedisClientImpl implements RedisClient {
      * @param unit
      * @return
      */
-    @Override
-    public Object lBRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) {
-        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, unit);
+    public String lBRightPopAndLeftPush(String sourceKey, String destinationKey,
+                                        long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey,
+                destinationKey, timeout, unit);
     }
 
     /**
@@ -770,8 +711,7 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
-    public Long lRemove(String key, long index, Object value) {
+    public Long lRemove(String key, long index, String value) {
         return redisTemplate.opsForList().remove(key, index, value);
     }
 
@@ -782,7 +722,6 @@ public class RedisClientImpl implements RedisClient {
      * @param start
      * @param end
      */
-    @Override
     public void lTrim(String key, long start, long end) {
         redisTemplate.opsForList().trim(key, start, end);
     }
@@ -793,12 +732,12 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long lLen(String key) {
         return redisTemplate.opsForList().size(key);
     }
 
     /** --------------------set相关操作-------------------------- */
+
     /**
      * set添加元素
      *
@@ -806,7 +745,6 @@ public class RedisClientImpl implements RedisClient {
      * @param values
      * @return
      */
-    @Override
     public Long sAdd(String key, String... values) {
         return redisTemplate.opsForSet().add(key, values);
     }
@@ -818,7 +756,6 @@ public class RedisClientImpl implements RedisClient {
      * @param values
      * @return
      */
-    @Override
     public Long sRemove(String key, Object... values) {
         return redisTemplate.opsForSet().remove(key, values);
     }
@@ -829,8 +766,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
-    public Object sPop(String key) {
+    public String sPop(String key) {
         return redisTemplate.opsForSet().pop(key);
     }
 
@@ -842,7 +778,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Boolean sMove(String key, String value, String destKey) {
         return redisTemplate.opsForSet().move(key, value, destKey);
     }
@@ -853,7 +788,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long sSize(String key) {
         return redisTemplate.opsForSet().size(key);
     }
@@ -865,7 +799,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
     public Boolean sIsMember(String key, Object value) {
         return redisTemplate.opsForSet().isMember(key, value);
     }
@@ -877,8 +810,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKey
      * @return
      */
-    @Override
-    public Set<Object> sIntersect(String key, String otherKey) {
+    public Set<String> sIntersect(String key, String otherKey) {
         return redisTemplate.opsForSet().intersect(key, otherKey);
     }
 
@@ -889,8 +821,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKeys
      * @return
      */
-    @Override
-    public Set<Object> sIntersect(String key, Collection<String> otherKeys) {
+    public Set<String> sIntersect(String key, Collection<String> otherKeys) {
         return redisTemplate.opsForSet().intersect(key, otherKeys);
     }
 
@@ -902,7 +833,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sIntersectAndStore(String key, String otherKey, String destKey) {
         return redisTemplate.opsForSet().intersectAndStore(key, otherKey,
                 destKey);
@@ -916,7 +846,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sIntersectAndStore(String key, Collection<String> otherKeys,
                                    String destKey) {
         return redisTemplate.opsForSet().intersectAndStore(key, otherKeys,
@@ -930,8 +859,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKeys
      * @return
      */
-    @Override
-    public Set<Object> sUnion(String key, String otherKeys) {
+    public Set<String> sUnion(String key, String otherKeys) {
         return redisTemplate.opsForSet().union(key, otherKeys);
     }
 
@@ -942,8 +870,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKeys
      * @return
      */
-    @Override
-    public Set<Object> sUnion(String key, Collection<String> otherKeys) {
+    public Set<String> sUnion(String key, Collection<String> otherKeys) {
         return redisTemplate.opsForSet().union(key, otherKeys);
     }
 
@@ -955,7 +882,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sUnionAndStore(String key, String otherKey, String destKey) {
         return redisTemplate.opsForSet().unionAndStore(key, otherKey, destKey);
     }
@@ -968,7 +894,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sUnionAndStore(String key, Collection<String> otherKeys,
                                String destKey) {
         return redisTemplate.opsForSet().unionAndStore(key, otherKeys, destKey);
@@ -981,8 +906,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKey
      * @return
      */
-    @Override
-    public Set<Object> sDifference(String key, String otherKey) {
+    public Set<String> sDifference(String key, String otherKey) {
         return redisTemplate.opsForSet().difference(key, otherKey);
     }
 
@@ -993,8 +917,7 @@ public class RedisClientImpl implements RedisClient {
      * @param otherKeys
      * @return
      */
-    @Override
-    public Set<Object> sDifference(String key, Collection<String> otherKeys) {
+    public Set<String> sDifference(String key, Collection<String> otherKeys) {
         return redisTemplate.opsForSet().difference(key, otherKeys);
     }
 
@@ -1006,7 +929,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sDifference(String key, String otherKey, String destKey) {
         return redisTemplate.opsForSet().differenceAndStore(key, otherKey,
                 destKey);
@@ -1020,7 +942,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long sDifference(String key, Collection<String> otherKeys,
                             String destKey) {
         return redisTemplate.opsForSet().differenceAndStore(key, otherKeys,
@@ -1033,8 +954,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
-    public Set<Object> setMembers(String key) {
+    public Set<String> setMembers(String key) {
         return redisTemplate.opsForSet().members(key);
     }
 
@@ -1044,8 +964,7 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
-    public Object sRandomMember(String key) {
+    public String sRandomMember(String key) {
         return redisTemplate.opsForSet().randomMember(key);
     }
 
@@ -1056,8 +975,7 @@ public class RedisClientImpl implements RedisClient {
      * @param count
      * @return
      */
-    @Override
-    public List<Object> sRandomMembers(String key, long count) {
+    public List<String> sRandomMembers(String key, long count) {
         return redisTemplate.opsForSet().randomMembers(key, count);
     }
 
@@ -1068,8 +986,7 @@ public class RedisClientImpl implements RedisClient {
      * @param count
      * @return
      */
-    @Override
-    public Set<Object> sDistinctRandomMembers(String key, long count) {
+    public Set<String> sDistinctRandomMembers(String key, long count) {
         return redisTemplate.opsForSet().distinctRandomMembers(key, count);
     }
 
@@ -1078,12 +995,12 @@ public class RedisClientImpl implements RedisClient {
      * @param options
      * @return
      */
-    @Override
-    public Cursor<Object> sScan(String key, ScanOptions options) {
+    public Cursor<String> sScan(String key, ScanOptions options) {
         return redisTemplate.opsForSet().scan(key, options);
     }
 
     /**------------------zSet相关操作--------------------------------*/
+
     /**
      * 添加元素,有序集合是按照元素的score值由小到大排列
      *
@@ -1092,7 +1009,6 @@ public class RedisClientImpl implements RedisClient {
      * @param score
      * @return
      */
-    @Override
     public Boolean zAdd(String key, String value, double score) {
         return redisTemplate.opsForZSet().add(key, value, score);
     }
@@ -1102,8 +1018,7 @@ public class RedisClientImpl implements RedisClient {
      * @param values
      * @return
      */
-    @Override
-    public Long zAdd(String key, Set<ZSetOperations.TypedTuple<Object>> values) {
+    public Long zAdd(String key, Set<TypedTuple<String>> values) {
         return redisTemplate.opsForZSet().add(key, values);
     }
 
@@ -1112,7 +1027,6 @@ public class RedisClientImpl implements RedisClient {
      * @param values
      * @return
      */
-    @Override
     public Long zRemove(String key, Object... values) {
         return redisTemplate.opsForZSet().remove(key, values);
     }
@@ -1125,7 +1039,6 @@ public class RedisClientImpl implements RedisClient {
      * @param delta
      * @return
      */
-    @Override
     public Double zIncrementScore(String key, String value, double delta) {
         return redisTemplate.opsForZSet().incrementScore(key, value, delta);
     }
@@ -1137,7 +1050,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return 0表示第一位
      */
-    @Override
     public Long zRank(String key, Object value) {
         return redisTemplate.opsForZSet().rank(key, value);
     }
@@ -1149,7 +1061,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
     public Long zReverseRank(String key, Object value) {
         return redisTemplate.opsForZSet().reverseRank(key, value);
     }
@@ -1162,8 +1073,7 @@ public class RedisClientImpl implements RedisClient {
      * @param end   结束位置, -1查询所有
      * @return
      */
-    @Override
-    public Set<Object> zRange(String key, long start, long end) {
+    public Set<String> zRange(String key, long start, long end) {
         return redisTemplate.opsForZSet().range(key, start, end);
     }
 
@@ -1175,8 +1085,8 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
-    public Set<ZSetOperations.TypedTuple<Object>> zRangeWithScores(String key, long start, long end) {
+    public Set<TypedTuple<String>> zRangeWithScores(String key, long start,
+                                                    long end) {
         return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
     }
 
@@ -1188,8 +1098,7 @@ public class RedisClientImpl implements RedisClient {
      * @param max 最大值
      * @return
      */
-    @Override
-    public Set<Object> zRangeByScore(String key, double min, double max) {
+    public Set<String> zRangeByScore(String key, double min, double max) {
         return redisTemplate.opsForZSet().rangeByScore(key, min, max);
     }
 
@@ -1201,8 +1110,8 @@ public class RedisClientImpl implements RedisClient {
      * @param max 最大值
      * @return
      */
-    @Override
-    public Set<ZSetOperations.TypedTuple<Object>> zRangeByScoreWithScores(String key, double min, double max) {
+    public Set<TypedTuple<String>> zRangeByScoreWithScores(String key,
+                                                           double min, double max) {
         return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max);
     }
 
@@ -1214,9 +1123,10 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
-    public Set<ZSetOperations.TypedTuple<Object>> zRangeByScoreWithScores(String key, double min, double max, long start, long end) {
-        return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max, start, end);
+    public Set<TypedTuple<String>> zRangeByScoreWithScores(String key,
+                                                           double min, double max, long start, long end) {
+        return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max,
+                start, end);
     }
 
     /**
@@ -1227,8 +1137,7 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
-    public Set<Object> zReverseRange(String key, long start, long end) {
+    public Set<String> zReverseRange(String key, long start, long end) {
         return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
 
@@ -1240,9 +1149,10 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
-    public Set<ZSetOperations.TypedTuple<Object>> zReverseRangeWithScores(String key, long start, long end) {
-        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
+    public Set<TypedTuple<String>> zReverseRangeWithScores(String key,
+                                                           long start, long end) {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start,
+                end);
     }
 
     /**
@@ -1253,8 +1163,8 @@ public class RedisClientImpl implements RedisClient {
      * @param max
      * @return
      */
-    @Override
-    public Set<Object> zReverseRangeByScore(String key, double min, double max) {
+    public Set<String> zReverseRangeByScore(String key, double min,
+                                            double max) {
         return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max);
     }
 
@@ -1266,10 +1176,10 @@ public class RedisClientImpl implements RedisClient {
      * @param max
      * @return
      */
-    @Override
-    public Set<ZSetOperations.TypedTuple<Object>> zReverseRangeByScoreWithScores(
+    public Set<TypedTuple<String>> zReverseRangeByScoreWithScores(
             String key, double min, double max) {
-        return redisTemplate.opsForZSet().reverseRangeByScoreWithScores(key, min, max);
+        return redisTemplate.opsForZSet().reverseRangeByScoreWithScores(key,
+                min, max);
     }
 
     /**
@@ -1280,9 +1190,10 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
-    public Set<Object> zReverseRangeByScore(String key, double min, double max, long start, long end) {
-        return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max, start, end);
+    public Set<String> zReverseRangeByScore(String key, double min,
+                                            double max, long start, long end) {
+        return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max,
+                start, end);
     }
 
     /**
@@ -1293,7 +1204,6 @@ public class RedisClientImpl implements RedisClient {
      * @param max
      * @return
      */
-    @Override
     public Long zCount(String key, double min, double max) {
         return redisTemplate.opsForZSet().count(key, min, max);
     }
@@ -1304,7 +1214,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long zSize(String key) {
         return redisTemplate.opsForZSet().size(key);
     }
@@ -1315,7 +1224,6 @@ public class RedisClientImpl implements RedisClient {
      * @param key
      * @return
      */
-    @Override
     public Long zZCard(String key) {
         return redisTemplate.opsForZSet().zCard(key);
     }
@@ -1327,7 +1235,6 @@ public class RedisClientImpl implements RedisClient {
      * @param value
      * @return
      */
-    @Override
     public Double zScore(String key, Object value) {
         return redisTemplate.opsForZSet().score(key, value);
     }
@@ -1340,7 +1247,6 @@ public class RedisClientImpl implements RedisClient {
      * @param end
      * @return
      */
-    @Override
     public Long zRemoveRange(String key, long start, long end) {
         return redisTemplate.opsForZSet().removeRange(key, start, end);
     }
@@ -1353,7 +1259,6 @@ public class RedisClientImpl implements RedisClient {
      * @param max
      * @return
      */
-    @Override
     public Long zRemoveRangeByScore(String key, double min, double max) {
         return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
     }
@@ -1366,7 +1271,6 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
     public Long zUnionAndStore(String key, String otherKey, String destKey) {
         return redisTemplate.opsForZSet().unionAndStore(key, otherKey, destKey);
     }
@@ -1377,9 +1281,10 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
-    public Long zUnionAndStore(String key, Collection<String> otherKeys, String destKey) {
-        return redisTemplate.opsForZSet().unionAndStore(key, otherKeys, destKey);
+    public Long zUnionAndStore(String key, Collection<String> otherKeys,
+                               String destKey) {
+        return redisTemplate.opsForZSet()
+                .unionAndStore(key, otherKeys, destKey);
     }
 
     /**
@@ -1390,9 +1295,10 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
-    public Long zIntersectAndStore(String key, String otherKey, String destKey) {
-        return redisTemplate.opsForZSet().intersectAndStore(key, otherKey, destKey);
+    public Long zIntersectAndStore(String key, String otherKey,
+                                   String destKey) {
+        return redisTemplate.opsForZSet().intersectAndStore(key, otherKey,
+                destKey);
     }
 
     /**
@@ -1403,9 +1309,10 @@ public class RedisClientImpl implements RedisClient {
      * @param destKey
      * @return
      */
-    @Override
-    public Long zIntersectAndStore(String key, Collection<String> otherKeys, String destKey) {
-        return redisTemplate.opsForZSet().intersectAndStore(key, otherKeys, destKey);
+    public Long zIntersectAndStore(String key, Collection<String> otherKeys,
+                                   String destKey) {
+        return redisTemplate.opsForZSet().intersectAndStore(key, otherKeys,
+                destKey);
     }
 
     /**
@@ -1413,8 +1320,7 @@ public class RedisClientImpl implements RedisClient {
      * @param options
      * @return
      */
-    @Override
-    public Cursor<ZSetOperations.TypedTuple<Object>> zScan(String key, ScanOptions options) {
+    public Cursor<TypedTuple<String>> zScan(String key, ScanOptions options) {
         return redisTemplate.opsForZSet().scan(key, options);
     }
 
