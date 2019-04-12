@@ -2,8 +2,8 @@ package com.example;
 
 import com.example.annotation.MQProducer;
 import com.example.base.AbstractMQProducer;
-import com.thread.config.MQBaseAutoConfiguration;
-import com.thread.config.MQProducerAutoConfiguration;
+import com.config.MQBaseAutoConfiguration;
+import com.config.MQProducerAutoConfiguration;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.junit.After;
 import org.junit.Test;

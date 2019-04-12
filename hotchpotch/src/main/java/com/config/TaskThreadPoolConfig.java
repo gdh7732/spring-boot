@@ -1,4 +1,4 @@
-package com.thread.config;
+package com.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -16,67 +15,67 @@
         <artifactId>springboot</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <build>
-        <plugins>
+    <!--<build>-->
+        <!--<plugins>-->
 
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.13</version>
+            <!--<plugin>-->
+                <!--<groupId>com.spotify</groupId>-->
+                <!--<artifactId>docker-maven-plugin</artifactId>-->
+                <!--<version>0.4.13</version>-->
 
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>tag-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>tag</goal>
-                        </goals>
-                        <configuration>
-                            <image>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</image>
-                            <newName>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</newName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>push-image</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <imageName>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName>
-                        </configuration>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>build</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>tag-image</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>tag</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<image>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</image>-->
+                            <!--<newName>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</newName>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>push-image</id>-->
+                        <!--<phase>deploy</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>push</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<imageName>${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
 
-                <configuration>
-                    <!-- 私有仓库配置，需要settings.xml文件配合serverId对应的服务地址 -->
-                    <serverId>docker-aliyun</serverId>
-                    <registryUrl>${docker.repository}</registryUrl>
-                    <pushImage>true</pushImage>
-                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                    <imageName>
-                        ${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}
-                    </imageName>
-                    <imageTags>
-                        <!--docker的tag为项目版本号、latest-->
-                        <imageTag>latest</imageTag>
-                    </imageTags>
-                    <resources>
-                        <rescource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </rescource>
-                    </resources>
-                </configuration>
-            </plugin>
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; 私有仓库配置，需要settings.xml文件配合serverId对应的服务地址 &ndash;&gt;-->
+                    <!--<serverId>docker-aliyun</serverId>-->
+                    <!--<registryUrl>${docker.repository}</registryUrl>-->
+                    <!--<pushImage>true</pushImage>-->
+                    <!--<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>-->
+                    <!--<imageName>-->
+                        <!--${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}-->
+                    <!--</imageName>-->
+                    <!--<imageTags>-->
+                        <!--&lt;!&ndash;docker的tag为项目版本号、latest&ndash;&gt;-->
+                        <!--<imageTag>latest</imageTag>-->
+                    <!--</imageTags>-->
+                    <!--<resources>-->
+                        <!--<rescource>-->
+                            <!--<targetPath>/</targetPath>-->
+                            <!--<directory>${project.build.directory}</directory>-->
+                            <!--<include>${project.build.finalName}.jar</include>-->
+                        <!--</rescource>-->
+                    <!--</resources>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
 
-        </plugins>
-    </build>
+        <!--</plugins>-->
+    <!--</build>-->
 </project>
