@@ -1,12 +1,12 @@
 package com.redis.client;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author guodahai
@@ -602,7 +602,7 @@ public interface RedisClient {
      * @param values
      * @return
      */
-    Long sAdd(String key, String... values);
+    Long sAdd(String key, Object... values);
 
     /**
      * set移除元素
@@ -629,7 +629,7 @@ public interface RedisClient {
      * @param destKey
      * @return
      */
-    Boolean sMove(String key, String value, String destKey);
+    Boolean sMove(String key, Object value, String destKey);
 
     /**
      * 获取集合的大小
@@ -771,7 +771,7 @@ public interface RedisClient {
      * @param key
      * @return
      */
-    Set<Object> setMembers(String key);
+    Set<Object> getMembers(String key);
 
     /**
      * 随机获取集合中的一个元素

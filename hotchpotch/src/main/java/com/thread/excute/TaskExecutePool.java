@@ -1,6 +1,6 @@
 package com.thread.excute;
 
-import com.config.TaskThreadPoolConfig;
+import com.thread.config.TaskThreadPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

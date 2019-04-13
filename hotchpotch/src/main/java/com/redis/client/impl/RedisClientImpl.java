@@ -1,8 +1,6 @@
 package com.redis.client.impl;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
+import com.redis.client.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,8 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import com.redis.client.RedisClient;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -807,7 +806,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Long sAdd(String key, String... values) {
+    public Long sAdd(String key, Object... values) {
         return redisTemplate.opsForSet().add(key, values);
     }
 
@@ -843,7 +842,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Boolean sMove(String key, String value, String destKey) {
+    public Boolean sMove(String key, Object value, String destKey) {
         return redisTemplate.opsForSet().move(key, value, destKey);
     }
 
@@ -1034,7 +1033,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Set<Object> setMembers(String key) {
+    public Set<Object> getMembers(String key) {
         return redisTemplate.opsForSet().members(key);
     }
 

@@ -1,4 +1,4 @@
-package com.config;
+package com.thread.config;
 
 import com.example.annotation.MQConsumer;
 import com.example.base.AbstractMQPushConsumer;

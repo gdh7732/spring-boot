@@ -1,16 +1,15 @@
 package com.redis.client;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import com.example.common.BaseResult;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.example.common.BaseResult;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author guodahai
@@ -18,7 +17,7 @@ import com.google.common.collect.Lists;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RedisClientListTest {
+public class RedisListTest {
     @Autowired
     protected RedisClient redisClient;
 
@@ -34,7 +33,7 @@ public class RedisClientListTest {
      */
     @Test
     public void lIndex() {
-        Object result = redisClient.lIndex("list", 0);
+        BaseResult result = (BaseResult)redisClient.lIndex("list", 0);
         System.out.println(result);
     }
 
@@ -43,7 +42,7 @@ public class RedisClientListTest {
      */
     @Test
     public void lSet() {
-        redisClient.lSet("list", 0, "a");
+        redisClient.lSet("list", 0, new BaseResult());
     }
 
     /**

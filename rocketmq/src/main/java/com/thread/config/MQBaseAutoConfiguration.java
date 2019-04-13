@@ -1,4 +1,4 @@
-package com.config;
+package com.thread.config;
 
 import com.example.annotation.EnableMQConfiguration;
 import com.example.base.AbstractMQProducer;
