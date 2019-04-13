@@ -287,10 +287,10 @@ public interface RedisClient {
      * @param field
      * @return
      */
-    Object hGet(String key, String field);
+    Object hGet(String key, Object field);
 
     /**
-     * 获取所有给定字段的值
+     * 获取所有字段的值
      *
      * @param key
      * @return
@@ -306,9 +306,22 @@ public interface RedisClient {
      */
     List<Object> hMultiGet(String key, Collection<Object> fields);
 
-    void hPut(String key, String hashKey, String value);
+    /**
+     * 存储
+     *
+     * @param key
+     * @param hashKey
+     * @param value
+     */
+    void hPut(String key, Object hashKey, Object value);
 
-    void hPutAll(String key, Map<String, String> maps);
+    /**
+     * 存储
+     *
+     * @param key
+     * @param maps
+     */
+    void hPutAll(String key, Map maps);
 
     /**
      * 仅当hashKey不存在时才设置
@@ -318,7 +331,7 @@ public interface RedisClient {
      * @param value
      * @return
      */
-    Boolean hPutIfAbsent(String key, String hashKey, String value);
+    Boolean hPutIfAbsent(String key, Object hashKey, Object value);
 
     /**
      * 删除一个或多个哈希表字段
@@ -336,7 +349,7 @@ public interface RedisClient {
      * @param field
      * @return
      */
-    boolean hExists(String key, String field);
+    boolean hExists(String key, Object field);
 
     /**
      * 为哈希表 key 中的指定字段的整数值加上增量 increment

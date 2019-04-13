@@ -391,12 +391,12 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Object hGet(String key, String field) {
+    public Object hGet(String key, Object field) {
         return redisTemplate.opsForHash().get(key, field);
     }
 
     /**
-     * 获取所有给定字段的值
+     * 获取所有字段的值
      *
      * @param key
      * @return
@@ -419,12 +419,12 @@ public class RedisClientImpl implements RedisClient {
     }
 
     @Override
-    public void hPut(String key, String hashKey, String value) {
+    public void hPut(String key, Object hashKey, Object value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
 
     @Override
-    public void hPutAll(String key, Map<String, String> maps) {
+    public void hPutAll(String key, Map maps) {
         redisTemplate.opsForHash().putAll(key, maps);
     }
 
@@ -437,7 +437,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Boolean hPutIfAbsent(String key, String hashKey, String value) {
+    public Boolean hPutIfAbsent(String key, Object hashKey, Object value) {
         return redisTemplate.opsForHash().putIfAbsent(key, hashKey, value);
     }
 
@@ -461,7 +461,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public boolean hExists(String key, String field) {
+    public boolean hExists(String key, Object field) {
         return redisTemplate.opsForHash().hasKey(key, field);
     }
 
