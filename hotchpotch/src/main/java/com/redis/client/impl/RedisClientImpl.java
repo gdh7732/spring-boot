@@ -1092,7 +1092,7 @@ public class RedisClientImpl implements RedisClient {
      * @return
      */
     @Override
-    public Boolean zAdd(String key, String value, double score) {
+    public Boolean zAdd(String key, Object value, double score) {
         return redisTemplate.opsForZSet().add(key, value, score);
     }
 

@@ -829,7 +829,7 @@ public interface RedisClient {
      * @param score
      * @return
      */
-    Boolean zAdd(String key, String value, double score);
+    Boolean zAdd(String key, Object value, double score);
 
     /**
      * @param key
