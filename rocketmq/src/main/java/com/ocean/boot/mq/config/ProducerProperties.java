@@ -61,8 +61,9 @@ public class ProducerProperties extends ClientConfig {
 
     /**
      * Maximum allowed message size in bytes.
+     * 4M
      */
-    private int maxMessageSize = 1024 * 1024 * 4; // 4M
+    private int maxMessageSize = 1024 * 1024 * 4;
 
     /**
      * 是否启用事务

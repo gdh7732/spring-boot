@@ -1,14 +1,11 @@
 package com.ocean.boot.mq.base;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.alibaba.fastjson.JSON;
+import com.ocean.boot.mq.annotation.RocketMQKey;
+import com.ocean.boot.mq.constants.MessageConstant;
+import com.ocean.boot.mq.enums.DelayTimeLevel;
+import com.ocean.boot.mq.exception.RocketMqException;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -19,14 +16,17 @@ import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
-import com.ocean.boot.mq.annotation.RocketMQKey;
-import com.ocean.boot.mq.constants.MessageConstant;
-import com.ocean.boot.mq.enums.DelayTimeLevel;
-import com.ocean.boot.mq.exception.RocketMqException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * RocketMQ消息生产者基类
+ *
+ * @author ocean
  */
 @Slf4j
 @Component
@@ -42,14 +42,15 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * fire and forget 不关心消息是否送达，可以提高发送tps
-     * @param topic topic
-     * @param tag tag
+     *
+     * @param topic  topic
+     * @param tag    tag
      * @param msgObj 消息内容
      * @throws RocketMqException 消息异常
      */
     public void sendOneWay(String topic, String tag, Object msgObj) throws RocketMqException {
         try {
-            if(null == msgObj) {
+            if (null == msgObj) {
                 throw new RocketMqException("no message body to send");
             }
             producer.sendOneway(generateMessage(topic, tag, msgObj));
@@ -62,16 +63,17 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 发送顺序消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObj 消息内容
+     *
+     * @param topic   topic
+     * @param tag     tag
+     * @param msgObj  消息内容
      * @param hashKey 用于hash后选择queue的key
      */
     public void sendOneWayOrderly(String topic, String tag, Object msgObj, String hashKey) {
-        if(null == msgObj) {
+        if (null == msgObj) {
             throw new RocketMqException("no message body to send");
         }
-        if(StringUtils.isEmpty(hashKey)) {
+        if (StringUtils.isEmpty(hashKey)) {
             // fall back to normal
             sendOneWay(topic, tag, msgObj);
         }
@@ -86,14 +88,15 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 同步发送消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObj  消息内容
+     *
+     * @param topic  topic
+     * @param tag    tag
+     * @param msgObj 消息内容
      * @throws RocketMqException 消息异常
      */
     public SendResult syncSend(String topic, String tag, Object msgObj) throws RocketMqException {
         try {
-            if(null == msgObj) {
+            if (null == msgObj) {
                 throw new RocketMqException("no message body to send");
             }
             Message message = generateMessage(topic, tag, msgObj);
@@ -109,14 +112,15 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 同步发送批量消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObjs  批量消息(msg body length limit 128k, msg properties length limit 32k)
+     *
+     * @param topic   topic
+     * @param tag     tag
+     * @param msgObjs 批量消息(msg body length limit 128k, msg properties length limit 32k)
      * @throws RocketMqException 消息异常
      */
     public SendResult syncSendBatch(String topic, String tag, Collection<? extends Object> msgObjs) throws RocketMqException {
         try {
-            if(null == msgObjs || msgObjs.isEmpty()) {
+            if (null == msgObjs || msgObjs.isEmpty()) {
                 throw new RocketMqException("no message body to send");
             }
             List<Message> messages = new ArrayList<>();
@@ -135,17 +139,18 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 同步发送顺序消息
-     * @param topic  topic
-     * @param tag tag
+     *
+     * @param topic   topic
+     * @param tag     tag
      * @param msgObj  消息内容
-     * @param hashKey  用于hash后选择queue的key
+     * @param hashKey 用于hash后选择queue的key
      * @throws RocketMqException 消息异常
      */
     public SendResult syncSendOrderly(String topic, String tag, Object msgObj, String hashKey) throws RocketMqException {
-        if(null == msgObj) {
+        if (null == msgObj) {
             throw new RocketMqException("no message body to send");
         }
-        if(StringUtils.isEmpty(hashKey)) {
+        if (StringUtils.isEmpty(hashKey)) {
             // fall back to normal
             syncSend(topic, tag, msgObj);
         }
@@ -162,9 +167,10 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 异步发送消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObj 消息内容
+     *
+     * @param topic        topic
+     * @param tag          tag
+     * @param msgObj       消息内容
      * @param sendCallback 回调
      * @throws RocketMqException 消息异常
      */
@@ -183,18 +189,19 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 异步发送消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObj 消息内容
+     *
+     * @param topic        topic
+     * @param tag          tag
+     * @param msgObj       消息内容
      * @param sendCallback 回调
-     * @param hashKey 用于hash后选择queue的key
+     * @param hashKey      用于hash后选择queue的key
      * @throws RocketMqException 消息异常
      */
     public void asyncSend(String topic, String tag, Object msgObj, SendCallback sendCallback, String hashKey) throws RocketMqException {
         if (null == msgObj) {
             throw new RocketMqException("no message body to send");
         }
-        if(StringUtils.isEmpty(hashKey)) {
+        if (StringUtils.isEmpty(hashKey)) {
             // fall back to normal
             asyncSend(topic, tag, msgObj, sendCallback);
         }
@@ -209,19 +216,20 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 同步发送消息
-     * @param topic topic
-     * @param tag tag
-     * @param msgObj  消息内容
+     *
+     * @param topic          topic
+     * @param tag            tag
+     * @param msgObj         消息内容
      * @param delayTimeLevel 延迟时间
      * @throws RocketMqException 消息异常
      */
     public SendResult syncSendDelay(String topic, String tag, Object msgObj, DelayTimeLevel delayTimeLevel) throws RocketMqException {
         try {
-            if(null == msgObj) {
+            if (null == msgObj) {
                 throw new RocketMqException("no message body to send");
             }
             Message message = generateMessage(topic, tag, msgObj);
-            if(delayTimeLevel != null) {
+            if (delayTimeLevel != null) {
                 message.setDelayTimeLevel(delayTimeLevel.getLevel());
             }
             SendResult sendResult = producer.send(message);
@@ -236,37 +244,40 @@ public abstract class AbstractRocketMQProducer {
 
     /**
      * 重写此方法处理发送后的逻辑
-     * @param sendResult  发送结果
+     *
+     * @param sendResult 发送结果
      */
-    public void doAfterSyncSend(SendResult sendResult) {}
+    public void doAfterSyncSend(SendResult sendResult) {
+    }
 
     /**
      * 生成消息
-     * @param topic 消息topic
-     * @param tag 消息tag
+     *
+     * @param topic  消息topic
+     * @param tag    消息tag
      * @param msgObj 消息内容
      * @return
      */
     private Message generateMessage(String topic, String tag, Object msgObj) {
         String str = JSON.toJSONString(msgObj);
-        if(StringUtils.isEmpty(topic)) {
+        if (StringUtils.isEmpty(topic)) {
             throw new RocketMqException("no topic defined to send this message");
         }
         Message message = new Message(topic, str.getBytes(Charset.forName(MessageConstant.DEFAULT_CHARSET)));
         if (!StringUtils.isEmpty(tag)) {
             message.setTags(tag);
         }
-        String messageKey= "";
+        String messageKey = "";
         try {
             Field[] fields = msgObj.getClass().getDeclaredFields();
             for (Field field : fields) {
-                Annotation[] allFAnnos= field.getAnnotations();
-                if(allFAnnos.length > 0) {
+                Annotation[] allFAnnos = field.getAnnotations();
+                if (allFAnnos.length > 0) {
                     for (int i = 0; i < allFAnnos.length; i++) {
-                        if(allFAnnos[i].annotationType().equals(RocketMQKey.class)) {
+                        if (allFAnnos[i].annotationType().equals(RocketMQKey.class)) {
                             field.setAccessible(true);
                             RocketMQKey mqKey = RocketMQKey.class.cast(allFAnnos[i]);
-                            if(field.get(msgObj) != null) {
+                            if (field.get(msgObj) != null) {
                                 messageKey = StringUtils.isEmpty(mqKey.prefix()) ? field.get(msgObj).toString() : (mqKey.prefix() + field.get(msgObj).toString());
                             }
                         }
@@ -276,7 +287,7 @@ public abstract class AbstractRocketMQProducer {
         } catch (Exception e) {
             log.warn("Parse messagekey fail", e);
         }
-        if(StringUtils.isNotEmpty(messageKey)) {
+        if (StringUtils.isNotEmpty(messageKey)) {
             message.setKeys(messageKey);
         }
         return message;

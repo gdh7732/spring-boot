@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.StandardEnvironment;
 
 import javax.annotation.PostConstruct;
@@ -29,6 +30,7 @@ import javax.annotation.PostConstruct;
 @ConditionalOnBean(annotation = EnableRocketMQConfig.class)
 @ConditionalOnClass(DefaultMQProducer.class)
 @EnableConfigurationProperties({ProducerProperties.class})
+@Configuration
 public class ProducerAutoConfig implements ApplicationContextAware {
     protected ApplicationContext applicationContext;
     @Autowired

@@ -4,6 +4,8 @@ import java.lang.annotation.*;
 
 /**
  * RocketMQ启用注解
+ *
+ * @author ocean
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

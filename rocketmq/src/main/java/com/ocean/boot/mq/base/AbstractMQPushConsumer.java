@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * RocketMQ消费者(Push模式)
+ *
+ * @author ocean
  */
 @Slf4j
 public abstract class AbstractMQPushConsumer<T> extends AbstractRocketMQConsumer<T> {
