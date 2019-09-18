@@ -7,18 +7,15 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>hotchpotch</name>
-    <description>Demo project for hotchpotch</description>
-
     <parent>
-        <groupId>com.example</groupId>
+        <groupId>com.ocean</groupId>
         <artifactId>springboot</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>com.ocean</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <!-- springboot整合redis -->
