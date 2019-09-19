@@ -1,5 +1,6 @@
 package com.ocean.rocket.config;
 
+import com.ocean.rocket.annotation.EnableRocketMQConfig;
 import com.ocean.rocket.annotation.RocketMQConsumer;
 import com.ocean.rocket.base.AbstractMQPushConsumer;
 import com.ocean.rocket.enums.ConsumeMode;
@@ -16,6 +17,7 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -26,8 +28,9 @@ import java.util.*;
  * @author ocean
  */
 @Slf4j
-@ConditionalOnBean(BaseAutoConfig.class)
+@ConditionalOnBean(annotation = EnableRocketMQConfig.class)
 @EnableConfigurationProperties({ConsumerProperties.class})
+@Configuration
 public class ConsumerAutoConfig extends BaseAutoConfig {
     @Autowired
     private ConsumerProperties consumerProperties;

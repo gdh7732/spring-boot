@@ -1,6 +1,6 @@
 package com.ocean.rocket.producer;
 
-import com.ocean.rocket.annotation.EnableRocketMQConfig;
+import com.ocean.rocket.annotation.RocketMQProducer;
 import com.ocean.rocket.base.AbstractRocketMQProducer;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
  * @author ocean
  */
 @Component
-@EnableRocketMQConfig
+@RocketMQProducer
 public class Producer extends AbstractRocketMQProducer {
-
 
 }

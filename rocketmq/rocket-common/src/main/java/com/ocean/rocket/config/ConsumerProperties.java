@@ -14,6 +14,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = ConsumerProperties.PREFIX)
 public class ConsumerProperties extends ClientConfig {
     public static final String PREFIX = "rocket.consumer";
+
+    private String namesrvAddr;
     /**
      * 是否开启VIP通道
      */
