@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -49,12 +50,29 @@ public class ProducerAutoConfig implements ApplicationContextAware {
             throw new RocketMqException("producerGroup must be defined");
         }
         if (StringUtils.isEmpty(producerProperties.getNamesrvAddr())) {
-            throw new RocketMqException("producer namesrvAddr must be defined");
+            throw new RocketMqException("defaultMQProducer namesrvAddr must be defined");
         }
-        DefaultMQProducer producer = new DefaultMQProducer(producerProperties.getProducerGroup());
+        DefaultMQProducer producer = new DefaultMQProducer("DefaultMQProducer");
         this.configure(producer);
         producer.start();
         log.info("DefaultMQProducer started:{}", producer.getProducerGroup());
+        // 应用退出时，调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销
+        Runtime.getRuntime().addShutdownHook(new ProducerShutdownHook(producer));
+        return producer;
+    }
+
+    @Bean
+    public TransactionMQProducer transactionMQProducer(ProducerProperties properties) throws MQClientException {
+        if (StringUtils.isEmpty(producerProperties.getProducerGroup())) {
+            throw new RocketMqException("producerGroup must be defined");
+        }
+        if (StringUtils.isEmpty(producerProperties.getNamesrvAddr())) {
+            throw new RocketMqException("defaultMQProducer namesrvAddr must be defined");
+        }
+        TransactionMQProducer producer = new TransactionMQProducer("TransactionMQProducer");
+        this.configure(producer);
+        producer.start();
+        log.info("TransactionMQProducer started:{}", producer.getProducerGroup());
         // 应用退出时，调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销
         Runtime.getRuntime().addShutdownHook(new ProducerShutdownHook(producer));
         return producer;
@@ -67,7 +85,7 @@ public class ProducerAutoConfig implements ApplicationContextAware {
      */
     public void configure(DefaultMQProducer producer) {
         producer.setNamesrvAddr(producerProperties.getNamesrvAddr());
-        producer.setProducerGroup(producerProperties.getProducerGroup());
+        //producer.setProducerGroup(producerProperties.getProducerGroup());
         producer.setInstanceName(producerProperties.getInstanceName());
         producer.setDefaultTopicQueueNums(producerProperties.getDefaultTopicQueueNums());
         producer.setMaxMessageSize(producerProperties.getMaxMessageSize());

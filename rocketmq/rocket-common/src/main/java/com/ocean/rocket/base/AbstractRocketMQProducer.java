@@ -7,15 +7,13 @@ import com.ocean.rocket.enums.DelayTimeLevel;
 import com.ocean.rocket.exception.RocketMqException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.MessageQueueSelector;
-import org.apache.rocketmq.client.producer.SendCallback;
-import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.client.producer.selector.SelectMessageQueueByHash;
 import org.apache.rocketmq.common.message.Message;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -31,8 +29,10 @@ import java.util.List;
 @Slf4j
 @Component
 public abstract class AbstractRocketMQProducer {
-    @Autowired
-    protected DefaultMQProducer producer;
+    @Resource
+    protected DefaultMQProducer defaultMQProducer;
+    @Resource
+    private TransactionMQProducer transactionMQProducer;
 
     private MessageQueueSelector messageQueueSelector = new SelectMessageQueueByHash();
 
@@ -57,7 +57,7 @@ public abstract class AbstractRocketMQProducer {
             if (null == msgObj) {
                 throw new RocketMqException("no message body to send");
             }
-            producer.sendOneway(generateMessage(topic, tag, msgObj));
+            defaultMQProducer.sendOneway(generateMessage(topic, tag, msgObj));
             log.info("Send oneway message:{}, topic:{}, tag:{}", msgObj, topic, tag);
         } catch (Exception e) {
             log.warn("Send oneway message fail, topic:{}, msgObj:{}", topic, msgObj, e);
@@ -83,7 +83,7 @@ public abstract class AbstractRocketMQProducer {
                 throw new RocketMqException("no message body to send");
             }
             Message message = generateMessage(topic, tag, msgObj);
-            SendResult sendResult = producer.send(message);
+            SendResult sendResult = defaultMQProducer.send(message);
             log.info("Send sync topic:{} tag:{}, sendResult:{}", topic, tag, sendResult);
             this.doAfterSyncSend(sendResult);
             return sendResult;
@@ -111,7 +111,7 @@ public abstract class AbstractRocketMQProducer {
             if (null == msgObj) {
                 throw new RocketMqException("no message body to send");
             }
-            producer.send(generateMessage(topic, tag, msgObj), sendCallback);
+            defaultMQProducer.send(generateMessage(topic, tag, msgObj), sendCallback);
             log.info("Send message async, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj);
         } catch (Exception e) {
             log.warn("Send message async fail, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj, e);
@@ -140,7 +140,7 @@ public abstract class AbstractRocketMQProducer {
             sendOneWay(topic, tag, msgObj);
         }
         try {
-            producer.sendOneway(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
+            defaultMQProducer.sendOneway(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
             log.info("Send oneway message orderly:{}, tag:{}, topic:{}, hashKey:{}", msgObj, topic, tag, hashKey);
         } catch (Exception e) {
             log.warn("Send oneway message orderly fail, topic:{}, tag:{}, hashKey:{}, msgObj:{}", topic, tag, msgObj, e);
@@ -166,7 +166,7 @@ public abstract class AbstractRocketMQProducer {
             syncSend(topic, tag, msgObj);
         }
         try {
-            SendResult sendResult = producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
+            SendResult sendResult = defaultMQProducer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
             log.info("Send message orderly, topic:{} tag:{} hashKey:{}, sendResult:{}", topic, tag, hashKey, sendResult);
             this.doAfterSyncSend(sendResult);
             return sendResult;
@@ -195,7 +195,7 @@ public abstract class AbstractRocketMQProducer {
             asyncSend(topic, tag, msgObj, sendCallback);
         }
         try {
-            producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey, sendCallback);
+            defaultMQProducer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey, sendCallback);
             log.info("Send message async, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj);
         } catch (Exception e) {
             log.warn("Send message async fail, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj, e);
@@ -225,7 +225,7 @@ public abstract class AbstractRocketMQProducer {
             if (delayTimeLevel != null) {
                 message.setDelayTimeLevel(delayTimeLevel.getLevel());
             }
-            SendResult sendResult = producer.send(message);
+            SendResult sendResult = defaultMQProducer.send(message);
             log.info("Send delayTime topic:{}, tag:{}, delayTime:{} msgId:{} {}", topic, tag, delayTimeLevel, sendResult.getMsgId(), sendResult);
             this.doAfterSyncSend(sendResult);
             return sendResult;
@@ -253,7 +253,7 @@ public abstract class AbstractRocketMQProducer {
             for (Object msgObj : msgObjs) {
                 messages.add(generateMessage(topic, tag, msgObj));
             }
-            SendResult sendResult = producer.send(messages);
+            SendResult sendResult = defaultMQProducer.send(messages);
             log.info("Send sync batch msgs topic:{} tag:{}, sendResult:{}", topic, tag, sendResult);
             this.doAfterSyncSend(sendResult);
             return sendResult;
@@ -261,6 +261,27 @@ public abstract class AbstractRocketMQProducer {
             log.warn("Send sync batch msgs fail, topic:{}, tag:{}, msgObj:{}", topic, tag, msgObjs, e);
             throw new RocketMqException(String.format("Send sync batch msgs fail, topic: %s, tag: %s", topic, tag), e);
         }
+    }
+
+    /**
+     * ==========================事务消息==========================
+     */
+
+    /**
+     * @param topic               topic
+     * @param tag                 tag
+     * @param msgObj              消息体
+     * @param param               本地业务参数
+     * @param transactionListener 事务监听
+     * @return
+     * @throws MQClientException
+     */
+    public TransactionSendResult sendMessageInTransaction(String topic, String tag, Object msgObj, final Object param, TransactionListener transactionListener) throws MQClientException {
+        if (null == transactionListener) {
+            throw new MQClientException("TransactionListener is null", null);
+        }
+        transactionMQProducer.setTransactionListener(transactionListener);
+        return transactionMQProducer.sendMessageInTransaction(generateMessage(topic, tag, msgObj), param);
     }
 
 
