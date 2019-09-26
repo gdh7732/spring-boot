@@ -41,7 +41,11 @@ public abstract class AbstractRocketMQProducer {
     }
 
     /**
-     * fire and forget 不关心消息是否送达，可以提高发送tps
+     * ==========================单向消息==========================
+     */
+
+    /**
+     * 单向发送 不关心消息是否送达，可以提高发送tps
      *
      * @param topic  topic
      * @param tag    tag
@@ -62,29 +66,8 @@ public abstract class AbstractRocketMQProducer {
     }
 
     /**
-     * 发送顺序消息
-     *
-     * @param topic   topic
-     * @param tag     tag
-     * @param msgObj  消息内容
-     * @param hashKey 用于hash后选择queue的key
+     * ==========================同步消息==========================
      */
-    public void sendOneWayOrderly(String topic, String tag, Object msgObj, String hashKey) {
-        if (null == msgObj) {
-            throw new RocketMqException("no message body to send");
-        }
-        if (StringUtils.isEmpty(hashKey)) {
-            // fall back to normal
-            sendOneWay(topic, tag, msgObj);
-        }
-        try {
-            producer.sendOneway(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
-            log.info("Send oneway message orderly:{}, tag:{}, topic:{}, hashKey:{}", msgObj, topic, tag, hashKey);
-        } catch (Exception e) {
-            log.warn("Send oneway message orderly fail, topic:{}, tag:{}, hashKey:{}, msgObj:{}", topic, tag, msgObj, e);
-            throw new RocketMqException(String.format("Send oneway message orderly fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
-        }
-    }
 
     /**
      * 同步发送消息
@@ -109,6 +92,149 @@ public abstract class AbstractRocketMQProducer {
             throw new RocketMqException(String.format("Send sync message fail, topic: %s, tag: %s", topic, tag), e);
         }
     }
+
+    /**
+     * ==========================异步消息==========================
+     */
+
+    /**
+     * 异步发送消息
+     *
+     * @param topic        topic
+     * @param tag          tag
+     * @param msgObj       消息内容
+     * @param sendCallback 回调
+     * @throws RocketMqException 消息异常
+     */
+    public void asyncSend(String topic, String tag, Object msgObj, SendCallback sendCallback) throws RocketMqException {
+        try {
+            if (null == msgObj) {
+                throw new RocketMqException("no message body to send");
+            }
+            producer.send(generateMessage(topic, tag, msgObj), sendCallback);
+            log.info("Send message async, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj);
+        } catch (Exception e) {
+            log.warn("Send message async fail, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj, e);
+            throw new RocketMqException(String.format("Send message async fail, topic: %s, tag: %s", topic, tag), e);
+        }
+    }
+
+    /**
+     * ==========================顺序消息==========================
+     */
+
+    /**
+     * 顺序消息（单向）
+     *
+     * @param topic   topic
+     * @param tag     tag
+     * @param msgObj  消息内容
+     * @param hashKey 用于hash后选择queue的key
+     */
+    public void sendOneWayOrderly(String topic, String tag, Object msgObj, String hashKey) {
+        if (null == msgObj) {
+            throw new RocketMqException("no message body to send");
+        }
+        if (StringUtils.isEmpty(hashKey)) {
+            // fall back to normal
+            sendOneWay(topic, tag, msgObj);
+        }
+        try {
+            producer.sendOneway(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
+            log.info("Send oneway message orderly:{}, tag:{}, topic:{}, hashKey:{}", msgObj, topic, tag, hashKey);
+        } catch (Exception e) {
+            log.warn("Send oneway message orderly fail, topic:{}, tag:{}, hashKey:{}, msgObj:{}", topic, tag, msgObj, e);
+            throw new RocketMqException(String.format("Send oneway message orderly fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
+        }
+    }
+
+    /**
+     * 顺序消息（同步）
+     *
+     * @param topic   topic
+     * @param tag     tag
+     * @param msgObj  消息内容
+     * @param hashKey 用于hash后选择queue的key
+     * @throws RocketMqException 消息异常
+     */
+    public SendResult syncSendOrderly(String topic, String tag, Object msgObj, String hashKey) throws RocketMqException {
+        if (null == msgObj) {
+            throw new RocketMqException("no message body to send");
+        }
+        if (StringUtils.isEmpty(hashKey)) {
+            // fall back to normal
+            syncSend(topic, tag, msgObj);
+        }
+        try {
+            SendResult sendResult = producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
+            log.info("Send message orderly, topic:{} tag:{} hashKey:{}, sendResult:{}", topic, tag, hashKey, sendResult);
+            this.doAfterSyncSend(sendResult);
+            return sendResult;
+        } catch (Exception e) {
+            log.warn("Send message orderly fail, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj, e);
+            throw new RocketMqException(String.format("Send message orderly fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
+        }
+    }
+
+    /**
+     * 顺序消息（异步）
+     *
+     * @param topic        topic
+     * @param tag          tag
+     * @param msgObj       消息内容
+     * @param sendCallback 回调
+     * @param hashKey      用于hash后选择queue的key
+     * @throws RocketMqException 消息异常
+     */
+    public void asyncSend(String topic, String tag, Object msgObj, SendCallback sendCallback, String hashKey) throws RocketMqException {
+        if (null == msgObj) {
+            throw new RocketMqException("no message body to send");
+        }
+        if (StringUtils.isEmpty(hashKey)) {
+            // fall back to normal
+            asyncSend(topic, tag, msgObj, sendCallback);
+        }
+        try {
+            producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey, sendCallback);
+            log.info("Send message async, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj);
+        } catch (Exception e) {
+            log.warn("Send message async fail, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj, e);
+            throw new RocketMqException(String.format("Send message async fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
+        }
+    }
+
+    /**
+     * ==========================延时消息==========================
+     */
+
+    /**
+     * 延时消息
+     *
+     * @param topic          topic
+     * @param tag            tag
+     * @param msgObj         消息内容
+     * @param delayTimeLevel 延迟时间
+     * @throws RocketMqException 消息异常
+     */
+    public SendResult syncSendDelay(String topic, String tag, Object msgObj, DelayTimeLevel delayTimeLevel) throws RocketMqException {
+        try {
+            if (null == msgObj) {
+                throw new RocketMqException("no message body to send");
+            }
+            Message message = generateMessage(topic, tag, msgObj);
+            if (delayTimeLevel != null) {
+                message.setDelayTimeLevel(delayTimeLevel.getLevel());
+            }
+            SendResult sendResult = producer.send(message);
+            log.info("Send delayTime topic:{}, tag:{}, delayTime:{} msgId:{} {}", topic, tag, delayTimeLevel, sendResult.getMsgId(), sendResult);
+            this.doAfterSyncSend(sendResult);
+            return sendResult;
+        } catch (Exception e) {
+            log.warn("Send sync delayTime message fail, topic:{}, tag:{}, delayTime:{} msgObj:{}", topic, tag, delayTimeLevel, msgObj, e);
+            throw new RocketMqException("Send sync delayTime message failed, topic:" + topic, e);
+        }
+    }
+
 
     /**
      * 同步发送批量消息
@@ -137,110 +263,6 @@ public abstract class AbstractRocketMQProducer {
         }
     }
 
-    /**
-     * 同步发送顺序消息
-     *
-     * @param topic   topic
-     * @param tag     tag
-     * @param msgObj  消息内容
-     * @param hashKey 用于hash后选择queue的key
-     * @throws RocketMqException 消息异常
-     */
-    public SendResult syncSendOrderly(String topic, String tag, Object msgObj, String hashKey) throws RocketMqException {
-        if (null == msgObj) {
-            throw new RocketMqException("no message body to send");
-        }
-        if (StringUtils.isEmpty(hashKey)) {
-            // fall back to normal
-            syncSend(topic, tag, msgObj);
-        }
-        try {
-            SendResult sendResult = producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey);
-            log.info("Send message orderly, topic:{} tag:{} hashKey:{}, sendResult:{}", topic, tag, hashKey, sendResult);
-            this.doAfterSyncSend(sendResult);
-            return sendResult;
-        } catch (Exception e) {
-            log.warn("Send message orderly fail, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj, e);
-            throw new RocketMqException(String.format("Send message orderly fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
-        }
-    }
-
-    /**
-     * 异步发送消息
-     *
-     * @param topic        topic
-     * @param tag          tag
-     * @param msgObj       消息内容
-     * @param sendCallback 回调
-     * @throws RocketMqException 消息异常
-     */
-    public void asyncSend(String topic, String tag, Object msgObj, SendCallback sendCallback) throws RocketMqException {
-        try {
-            if (null == msgObj) {
-                throw new RocketMqException("no message body to send");
-            }
-            producer.send(generateMessage(topic, tag, msgObj), sendCallback);
-            log.info("Send message async, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj);
-        } catch (Exception e) {
-            log.warn("Send message async fail, topic:{} tag:{}, msgObj:{}", topic, tag, msgObj, e);
-            throw new RocketMqException(String.format("Send message async fail, topic: %s, tag: %s", topic, tag), e);
-        }
-    }
-
-    /**
-     * 异步发送消息
-     *
-     * @param topic        topic
-     * @param tag          tag
-     * @param msgObj       消息内容
-     * @param sendCallback 回调
-     * @param hashKey      用于hash后选择queue的key
-     * @throws RocketMqException 消息异常
-     */
-    public void asyncSend(String topic, String tag, Object msgObj, SendCallback sendCallback, String hashKey) throws RocketMqException {
-        if (null == msgObj) {
-            throw new RocketMqException("no message body to send");
-        }
-        if (StringUtils.isEmpty(hashKey)) {
-            // fall back to normal
-            asyncSend(topic, tag, msgObj, sendCallback);
-        }
-        try {
-            producer.send(generateMessage(topic, tag, msgObj), messageQueueSelector, hashKey, sendCallback);
-            log.info("Send message async, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj);
-        } catch (Exception e) {
-            log.warn("Send message async fail, topic:{} tag:{} hashKey:{}, msgObj:{}", topic, tag, hashKey, msgObj, e);
-            throw new RocketMqException(String.format("Send message async fail, topic: %s, tag: %s, hashKey: %s", topic, tag, hashKey), e);
-        }
-    }
-
-    /**
-     * 同步发送消息
-     *
-     * @param topic          topic
-     * @param tag            tag
-     * @param msgObj         消息内容
-     * @param delayTimeLevel 延迟时间
-     * @throws RocketMqException 消息异常
-     */
-    public SendResult syncSendDelay(String topic, String tag, Object msgObj, DelayTimeLevel delayTimeLevel) throws RocketMqException {
-        try {
-            if (null == msgObj) {
-                throw new RocketMqException("no message body to send");
-            }
-            Message message = generateMessage(topic, tag, msgObj);
-            if (delayTimeLevel != null) {
-                message.setDelayTimeLevel(delayTimeLevel.getLevel());
-            }
-            SendResult sendResult = producer.send(message);
-            log.info("Send delayTime topic:{}, tag:{}, delayTime:{} msgId:{} {}", topic, tag, delayTimeLevel, sendResult.getMsgId(), sendResult);
-            this.doAfterSyncSend(sendResult);
-            return sendResult;
-        } catch (Exception e) {
-            log.warn("Send sync delayTime message fail, topic:{}, tag:{}, delayTime:{} msgObj:{}", topic, tag, delayTimeLevel, msgObj, e);
-            throw new RocketMqException("Send sync delayTime message failed, topic:" + topic, e);
-        }
-    }
 
     /**
      * 重写此方法处理发送后的逻辑
