@@ -26,6 +26,7 @@
         <module>rabbitmq</module>
         <module>common</module>
         <module>rocketmq</module>
+        <module>xxl-job</module>
     </modules>
 
     <properties>

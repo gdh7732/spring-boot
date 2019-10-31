@@ -1,0 +1,30 @@
+version: '2'
+services:
+  zookeeper:
+    ## 镜像
+    image: wurstmeister/zookeeper
+    ## 对外暴露的端口号
+    ports:
+      - "2181:2181"
+  kafka:
+    ## 镜像
+    image: wurstmeister/kafka
+    ## 挂载位置（kafka镜像和宿主机器之间时间保持一直）
+    volumes:
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "9092:9092"
+    environment:
+      ## 修改:宿主机IP
+      KAFKA_ADVERTISED_HOST_NAME: 10.204.254.43
+      ## 卡夫卡运行是基于zookeeper的
+      KAFKA_ZOOKEEPER_CONNECT: 10.204.254.43:2181
+  kafka-manager:
+    ## 镜像：开源的web管理kafka集群的界面
+    image: sheepkiller/kafka-manager
+    environment:
+      ## 修改:宿主机IP
+      ZK_HOSTS: 10.204.254.43
+    ## 暴露端口
+    ports:
+      - "9000:9000"
