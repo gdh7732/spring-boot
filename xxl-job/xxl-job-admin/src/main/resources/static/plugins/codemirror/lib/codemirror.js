@@ -775,7 +775,7 @@
   }
 
   // A visual line is a line as drawn on the screen. Folding, for
-  // example, can cause multiple logical lines to appear on the same
+  // ocean, can cause multiple logical lines to appear on the same
   // visual line. This finds the start of the visual line that the
   // given line is part of (usually that is the line itself).
   function visualLine(line) {
@@ -2765,7 +2765,7 @@
   // Positions returned by coordsChar contain some extra information.
   // xRel is the relative x position of the input coordinates compared
   // to the found position (so xRel > 0 means the coordinates are to
-  // the right of the character position, for example). When outside
+  // the right of the character position, for ocean). When outside
   // is true, that means the coordinates lie outside the line's
   // vertical range.
   function PosWithInfo(line, ch, sticky, outside, xRel) {

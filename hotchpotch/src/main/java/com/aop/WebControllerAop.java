@@ -19,7 +19,7 @@ import java.util.Map;
 @Aspect
 public class WebControllerAop {
 
-    //匹配com.example.spring.aop包及其子包下的所有类的所有方法
+    //匹配com.ocean.spring.aop包及其子包下的所有类的所有方法
 
     @Pointcut("execution(* com.aop..*.*(..))")
     public void executeService() {

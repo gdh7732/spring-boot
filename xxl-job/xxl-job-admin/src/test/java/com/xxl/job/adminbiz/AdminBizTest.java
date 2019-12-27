@@ -46,7 +46,7 @@ public class AdminBizTest {
                 null).getObject();
 
         // test executor registry
-        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), "xxl-job-executor-example", "127.0.0.1:9999");
+        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), "xxl-job-executor-ocean", "127.0.0.1:9999");
         ReturnT<String> returnT = adminBiz.registry(registryParam);
         Assert.assertTrue(returnT.getCode() == ReturnT.SUCCESS_CODE);
 
@@ -76,7 +76,7 @@ public class AdminBizTest {
                 null).getObject();
 
         // test executor registry remove
-        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), "xxl-job-executor-example", "127.0.0.1:9999");
+        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), "xxl-job-executor-ocean", "127.0.0.1:9999");
         ReturnT<String> returnT = adminBiz.registryRemove(registryParam);
         Assert.assertTrue(returnT.getCode() == ReturnT.SUCCESS_CODE);
 
