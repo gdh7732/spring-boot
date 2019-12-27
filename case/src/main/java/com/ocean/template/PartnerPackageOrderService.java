@@ -11,10 +11,6 @@ import java.util.List;
  */
 @Service("partnerPackageOrderService")
 public class PartnerPackageOrderService extends AbstractPackageOrderService {
-    @Override
-    void checkPackageOrder(List<PackageOrder> packageOrderList) {
-        System.out.println("合作商户包裹订单，检验包裹订单");
-    }
 
     @Override
     void matchPackageOrder(List<PackageOrder> packageOrderList) {
@@ -26,4 +22,6 @@ public class PartnerPackageOrderService extends AbstractPackageOrderService {
         System.out.println("合作商户包裹订单，生成相应履约单");
     }
 }
+
+
 

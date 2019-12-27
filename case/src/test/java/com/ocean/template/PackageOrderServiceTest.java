@@ -19,14 +19,22 @@ public class PackageOrderServiceTest {
     @Resource
     private PackageOrderService partnerPackageOrderService;
 
+    /**
+     * 巢鲜厨订单包裹处理
+     */
     @Test
     public void mallPackageOrder() {
         mallPackageOrderService.process(Lists.newArrayList());
     }
 
+    /**
+     * 合作商户订单包裹处理
+     */
     @Test
     public void partnerPackageOrder() {
         partnerPackageOrderService.process(Lists.newArrayList());
     }
 }
+
+
 

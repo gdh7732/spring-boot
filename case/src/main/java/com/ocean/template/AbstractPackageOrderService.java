@@ -7,9 +7,10 @@ import java.util.List;
  *
  * @author 郭大海
  */
+@SuppressWarnings("all")
 public abstract class AbstractPackageOrderService implements PackageOrderService {
     /**
-     * 处理包裹订单
+     * 处理包裹订单流程
      * @param packageOrderList 包裹订单list
      */
     @Override
@@ -18,11 +19,15 @@ public abstract class AbstractPackageOrderService implements PackageOrderService
         matchPackageOrder(packageOrderList);
         generatePerformOrder(packageOrderList);
     }
+
     /**
      * 检验包裹订单
      * @param packageOrderList 包裹订单list
      */
-    abstract void checkPackageOrder(List<PackageOrder> packageOrderList);
+    void checkPackageOrder(List<PackageOrder> packageOrderList) {
+        System.out.println("同样的检验");
+    }
+
     /**
      * 匹配关联信息
      * @param packageOrderList 包裹订单list

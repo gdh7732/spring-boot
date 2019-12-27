@@ -1,13 +1,15 @@
-package com.ocean.template;
+package com.ocean.strategy;
+
+import com.ocean.template.PackageOrder;
 
 import java.util.List;
 
 /**
- * 包裹订单处理
+ * 包裹订单处理策略接口
  *
  * @author 郭大海
  */
-public interface PackageOrderService {
+public interface PackageOrderStrategy {
 
     /**
      * 处理包裹订单
